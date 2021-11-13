@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+<meta name="description" content="documentation">
+<meta name="generator" content="Paradox, paradox-material-theme=0.6.0, mkdocs-material=3.0.3">
+
+<meta name="lang:clipboard.copy" content="Copy to clipboard">
+<meta name="lang:clipboard.copied" content="Copied to clipboard">
+<meta name="lang:search.language" content="">
+<meta name="lang:search.pipeline.stopwords" content="true">
+<meta name="lang:search.pipeline.trimmer" content="true">
+<meta name="lang:search.result.none" content="No matching documents">
+<meta name="lang:search.result.one" content="1 matching document">
+<meta name="lang:search.result.other" content="# matching documents">
+<meta name="lang:search.tokenizer" content="[\s\-]+">
+
+
+<meta name="description" content="documentation">
+<link rel="shortcut icon" href="favicon.png">
+<title>Example app · </title>
+<link rel="stylesheet" href="assets/stylesheets/application.451f80e5.css">
+<link rel="stylesheet" href="assets/stylesheets/application-palette.22915126.css">
+<meta name="theme-color" content="#546e7a" />
+<link rel="stylesheet" href="lib/material__tabs/dist/mdc.tabs.min.css">
+<link rel="stylesheet" href="lib/prettify/prettify.css">
+<script src="assets/javascripts/modernizr.1aa3b519.js"></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Overpass:300,400,400i,700|Overpass+Mono">
+<style>
+body,input{font-family:"Overpass","Helvetica Neue",Helvetica,Arial,sans-serif}
+code,kbd,pre{font-family:"Overpass Mono","Courier New",Courier,monospace}
+</style>
+<link rel="stylesheet" href="assets/fonts/font-awesome.css">
+<link rel="stylesheet" href="assets/fonts/material-icons.css">
+<link rel="stylesheet" href="assets/stylesheets/paradox-material-theme.css">
+</head>
+<body
+data-md-color-primary="blue-grey"
+data-md-color-accent="red"
+>
+<input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+<input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+<label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
+<header class="md-header" data-md-component="header">
+<nav class="md-header-nav md-grid">
+<div class="md-flex">
+<div class="md-flex__cell md-flex__cell--shrink">
+<a href="index.html" title="" class="md-header-nav__button md-logo">
+<img src="logo-symbol-only.svg" width="24" height="24">
+</a>
+</div>
+<div class="md-flex__cell md-flex__cell--shrink">
+<label class="md-icon md-icon--menu md-header-nav__button" for="__drawer"></label>
+</div>
+<div class="md-flex__cell md-flex__cell--stretch">
+<div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
+<span class="md-header-nav__topic">
+</span>
+<span class="md-header-nav__topic">
+Example app
+</span>
+</div>
+</div>
+<div class="md-flex__cell md-flex__cell--shrink">
+<label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
+<div class="md-search" data-md-component="search" role="dialog">
+<label class="md-search__overlay" for="__search"></label>
+<div class="md-search__inner" role="search">
+<form class="md-search__form" name="search">
+<input type="text" class="md-search__input" name="query" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query" data-md-state="active">
+<label class="md-icon md-search__icon" for="__search"></label>
+<button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">&#xE5CD;</button>
+</form>
+<div class="md-search__output">
+<div class="md-search__scrollwrap" data-md-scrollfix>
+<div class="md-search-result" data-md-component="result">
+<div class="md-search-result__meta">
+Type to start searching
+</div>
+<ol class="md-search-result__list"></ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+<div class="md-flex__cell md-flex__cell--shrink">
+<div class="md-header-nav__source">
+<a href="https://github.com/endless4s/endless"
+title="Go to repository"
+class="md-source"
+data-md-source="github">
+<div class="md-source__icon">
+<i class="fa fa-github"></i>
+</div>
+<div class="md-source__repository">
+endless4s/endless
+</div>
+</a>
+
+</div>
+</div>
+</div>
+</nav>
+</header>
+
+<div class="md-container">
+<main class="md-main">
+<div class="md-main__inner md-grid" data-md-component="container">
+<div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav class="md-nav md-nav--primary" data-md-level="0" style="visibility: hidden">
+<label class="md-nav__title md-nav__title--site" for="drawer">
+<a href="index.html" title="" class="md-nav__button md-logo">
+<span class="md-nav__button md-logo">
+<img src="logo-symbol-only.svg" width="24" height="24">
+</a>
+<a href="index.html" title="">
+</a>
+</label>
+<div class="md-nav__source">
+<a href="https://github.com/endless4s/endless"
+title="Go to repository"
+class="md-source"
+data-md-source="github">
+<div class="md-source__icon">
+<i class="fa fa-github"></i>
+</div>
+<div class="md-source__repository">
+endless4s/endless
+</div>
+</a>
+
+</div>
+<ul>
+  <li><a href="getting-started.html" class="page">Getting Started</a></li>
+  <li><a href="nutshell.html" class="page">In a nutshell</a></li>
+  <li><a href="typeclasses.html" class="page">Typeclasses</a>
+  <ul>
+    <li><a href="repository.html" class="page">Repository</a></li>
+    <li><a href="entity.html" class="page">Entity</a></li>
+    <li><a href="applier.html" class="page">EventApplier</a></li>
+    <li><a href="protocol.html" class="page">CommandProtocol</a></li>
+    <li><a href="router.html" class="page">CommandRouter</a></li>
+    <li><a href="effector.html" class="page">Effector</a></li>
+    <li><a href="name.html" class="page">EntityNameProvider</a></li>
+    <li><a href="id.html" class="page">EntityIDEncoder</a></li>
+  </ul></li>
+  <li><a href="runtime.html" class="page">Akka runtime</a></li>
+  <li><a href="example.html" class="active page">Example app</a></li>
+  <li><a href="reference.html" class="page">Reference</a></li>
+  <li><a href="inspiration.html" class="page">Inspiration</a></li>
+</ul>
+<nav class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">Table of contents</label>
+<ul>
+  <li><a href="example.html#example-app" class="header">Example app</a>
+  <ul>
+    <li><a href="example.html#api" class="header">API</a></li>
+    <li><a href="example.html#scaffolding" class="header">Scaffolding</a></li>
+    <li><a href="example.html#algebras" class="header">Algebras</a></li>
+    <li><a href="example.html#implementations" class="header">Implementations</a></li>
+    <li><a href="example.html#event-handling" class="header">Event handling</a></li>
+    <li><a href="example.html#protocol" class="header">Protocol</a></li>
+    <li><a href="example.html#side-effects" class="header">Side-effects</a></li>
+    <li><a href="example.html#testing" class="header">Testing</a></li>
+  </ul></li>
+</ul>
+</nav>
+
+</nav>
+<ul style="display: none">
+<li class="md-nav__item md-version" id="project.version">
+<label class="md-nav__link" for="__version">
+<i class="md-icon" title="Version">label_outline</i> 0.10.1
+</label>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">Table of contents</label>
+<ul>
+  <li><a href="example.html#example-app" class="header">Example app</a>
+  <ul>
+    <li><a href="example.html#api" class="header">API</a></li>
+    <li><a href="example.html#scaffolding" class="header">Scaffolding</a></li>
+    <li><a href="example.html#algebras" class="header">Algebras</a></li>
+    <li><a href="example.html#implementations" class="header">Implementations</a></li>
+    <li><a href="example.html#event-handling" class="header">Event handling</a></li>
+    <li><a href="example.html#protocol" class="header">Protocol</a></li>
+    <li><a href="example.html#side-effects" class="header">Side-effects</a></li>
+    <li><a href="example.html#testing" class="header">Testing</a></li>
+  </ul></li>
+</ul>
+</nav>
+
+</div>
+</div>
+</div>
+<div class="md-content">
+<article class="md-content__inner md-typeset">
+<div class="md-content__searchable">
+<h1><a href="#example-app" name="example-app" class="anchor"><span class="anchor-link"></span></a>Example app</h1>
+<p>Endless example application is a small API for managing imaginary bookings for passenger trips from some origin to some destination. It can be found in <code>endless-example</code> and can be run directly: <code>sbt run</code>. </p>
+<h2><a href="#api" name="api" class="anchor"><span class="anchor-link"></span></a>API</h2>
+<p>It has a simple CRUD API for those bookings:</p>
+<pre class="prettyprint"><button class="snippet-button copy-snippet" title="Copy snippet to clipboard">copy</button><a class="snippet-button go-to-source" href="https://github.com/endless4s/endless/tree/v0.10.1/example/src/main/scala/endless/example/ExampleApp.scala#L70-L77" target="_blank" title="Go to snippet source">source</a><code class="language-scala">private def httpService(bookingRepository: BookingRepositoryAlg[IO]): HttpApp[IO] = HttpRoutes
+  .of[IO] {
+    case req @ POST -&gt; Root / &quot;booking&quot;                =&gt; postBooking(bookingRepository, req)
+    case GET -&gt; Root / &quot;booking&quot; / UUIDVar(id)         =&gt; getBooking(bookingRepository, id)
+    case req @ PATCH -&gt; Root / &quot;booking&quot; / UUIDVar(id) =&gt; patchBooking(bookingRepository, req, id)
+    case POST -&gt; Root / &quot;booking&quot; / UUIDVar(id) / &quot;cancel&quot; =&gt; cancelBooking(bookingRepository, id)
+  }
+  .orNotFound</code></pre>
+<h2><a href="#scaffolding" name="scaffolding" class="anchor"><span class="anchor-link"></span></a>Scaffolding</h2>
+<p>The application is assembled via a call to <a href="api/runtime/endless/runtime/akka/Deployer$$deployEntity.html" title="endless.runtime.akka.Deployer.deployEntity"><code>deployEntity</code></a> (see <a href="runtime.html">runtime</a> for more details)</p>
+<pre class="prettyprint"><button class="snippet-button copy-snippet" title="Copy snippet to clipboard">copy</button><a class="snippet-button go-to-source" href="https://github.com/endless4s/endless/tree/v0.10.1/example/src/main/scala/endless/example/ExampleApp.scala#L39-L66" target="_blank" title="Go to snippet source">source</a><code class="language-scala">def apply(implicit actorSystem: ActorSystem[Nothing]): IO[Resource[IO, Server]] = {
+  implicit val clusterSharding: ClusterSharding = ClusterSharding(actorSystem)
+  implicit val commandProtocol: BookingCommandProtocol = new BookingCommandProtocol
+  implicit val eventApplier: BookingEventApplier = new BookingEventApplier
+  implicit val bookingEntityNameProvider: EntityNameProvider[BookingID] = () =&gt; &quot;booking&quot;
+  implicit val idEncoder: EntityIDEncoder[BookingID] = _.id.toString
+  implicit val askTimeout: Timeout = Timeout(10.seconds)
+
+  Slf4jLogger
+    .create[IO]
+    .map(implicit logger =&gt; {
+      deployEntity[IO, Booking, BookingEvent, BookingID, BookingAlg, BookingRepositoryAlg](
+        BookingEntity(_),
+        BookingRepository(_),
+        BookingEffector(_)
+      ).map { case (bookingRepository, _) =&gt;
+        httpService(bookingRepository)
+      }
+    })
+    .map(
+      _.flatMap(service =&gt;
+        BlazeServerBuilder[IO]
+          .bindHttp(8080, &quot;localhost&quot;)
+          .withHttpApp(service)
+          .resource
+      )
+    )
+}</code></pre>
+<h2><a href="#algebras" name="algebras" class="anchor"><span class="anchor-link"></span></a>Algebras</h2>
+<p>You might have spotted the two algebra types in the snippet above, which are defined like so:</p>
+<pre class="prettyprint"><button class="snippet-button copy-snippet" title="Copy snippet to clipboard">copy</button><a class="snippet-button go-to-source" href="https://github.com/endless4s/endless/tree/v0.10.1/example/src/main/scala/endless/example/algebra/BookingRepositoryAlg.scala#L6-L8" target="_blank" title="Go to snippet source">source</a><code class="language-scala">trait BookingRepositoryAlg[F[_]] {
+  def bookingFor(bookingID: BookingID): BookingAlg[F]
+}</code></pre>
+<pre class="prettyprint"><button class="snippet-button copy-snippet" title="Copy snippet to clipboard">copy</button><a class="snippet-button go-to-source" href="https://github.com/endless4s/endless/tree/v0.10.1/example/src/main/scala/endless/example/algebra/BookingAlg.scala#L10-L25" target="_blank" title="Go to snippet source">source</a><code class="language-scala">trait BookingAlg[F[_]] {
+  def place(
+      bookingID: BookingID,
+      passengerCount: Int,
+      origin: LatLon,
+      destination: LatLon
+  ): F[BookingAlreadyExists \/ Unit]
+  def get: F[BookingUnknown.type \/ Booking]
+  def changeOrigin(newOrigin: LatLon): F[BookingUnknown.type \/ Unit]
+  def changeDestination(newDestination: LatLon): F[BookingUnknown.type \/ Unit]
+  def changeOriginAndDestination(
+      newOrigin: LatLon,
+      newDestination: LatLon
+  ): F[BookingUnknown.type \/ Unit]
+  def cancel: F[BookingUnknown.type \/ Unit]
+}</code></pre>
+<h2><a href="#implementations" name="implementations" class="anchor"><span class="anchor-link"></span></a>Implementations</h2>
+<p>Implementation of the repository algebra is trivial using <code>Repository</code> typeclass instance (injected by <code>deployEntity</code>):</p>
+<pre class="prettyprint"><button class="snippet-button copy-snippet" title="Copy snippet to clipboard">copy</button><a class="snippet-button go-to-source" href="https://github.com/endless4s/endless/tree/v0.10.1/example/src/main/scala/endless/example/logic/BookingRepository.scala#L9-L13" target="_blank" title="Go to snippet source">source</a><code class="language-scala">final case class BookingRepository[F[_]: Monad](repository: Repository[F, BookingID, BookingAlg])
+    extends BookingRepositoryAlg[F] {
+  import repository._
+  def bookingFor(bookingID: BookingID): BookingAlg[F] = entityFor(bookingID)
+}</code></pre>
+<p>Implementation of entity algebra is done using the <code>Entity</code> typeclass instance (also injected by <code>deployEntity</code>):</p>
+<pre class="prettyprint"><button class="snippet-button copy-snippet" title="Copy snippet to clipboard">copy</button><a class="snippet-button go-to-source" href="https://github.com/endless4s/endless/tree/v0.10.1/example/src/main/scala/endless/example/logic/BookingEntity.scala#L18-L56" target="_blank" title="Go to snippet source">source</a><code class="language-scala">final case class BookingEntity[F[_]: Monad: Logger](entity: Entity[F, Booking, BookingEvent])
+    extends BookingAlg[F] {
+  import entity._
+
+  def place(
+      bookingID: BookingID,
+      passengerCount: Int,
+      origin: LatLon,
+      destination: LatLon
+  ): F[BookingAlreadyExists \/ Unit] =
+    ifUnknownF(
+      Logger[F].info(show&quot;Creating booking with ID $bookingID&quot;) &gt;&gt; write(
+        BookingPlaced(bookingID, origin, destination, passengerCount)
+      )
+    )(_ =&gt; BookingAlreadyExists(bookingID))
+
+  def get: F[BookingUnknown.type \/ Booking] = ifKnown(identity)(BookingUnknown)
+
+  def changeOrigin(newOrigin: LatLon): F[BookingUnknown.type \/ Unit] =
+    ifKnownF(booking =&gt;
+      if (booking.origin =!= newOrigin) entity.write(OriginChanged(newOrigin)) else ().pure
+    )(BookingUnknown)
+
+  def changeDestination(newDestination: LatLon): F[BookingUnknown.type \/ Unit] =
+    ifKnownF(booking =&gt;
+      if (booking.destination =!= newDestination) entity.write(DestinationChanged(newDestination))
+      else ().pure
+    )(BookingUnknown)
+
+  def changeOriginAndDestination(
+      newOrigin: LatLon,
+      newDestination: LatLon
+  ): F[BookingUnknown.type \/ Unit] = changeOrigin(newOrigin) &gt;&gt; changeDestination(newDestination)
+
+  def cancel: F[BookingAlg.BookingUnknown.type \/ Unit] =
+    ifKnownF(booking =&gt; if (!booking.cancelled) entity.write(BookingCancelled) else ().pure)(
+      BookingUnknown
+    )
+}</code></pre>
+<h2><a href="#event-handling" name="event-handling" class="anchor"><span class="anchor-link"></span></a>Event handling</h2>
+<p>In this simple example, events essentially set fields in the state:</p>
+<pre class="prettyprint"><button class="snippet-button copy-snippet" title="Copy snippet to clipboard">copy</button><a class="snippet-button go-to-source" href="https://github.com/endless4s/endless/tree/v0.10.1/example/src/main/scala/endless/example/logic/BookingEventApplier.scala#L10-L28" target="_blank" title="Go to snippet source">source</a><code class="language-scala">class BookingEventApplier extends EventApplier[Booking, BookingEvent] {
+  def apply(state: Option[Booking], event: BookingEvent): String \/ Option[Booking] =
+    (event match {
+      case BookingPlaced(bookingID, origin, destination, passengerCount) =&gt;
+        state
+          .toLeft(Booking(bookingID, origin, destination, passengerCount))
+          .leftMap(_ =&gt; &quot;Booking already exists&quot;)
+      case OriginChanged(newOrigin) =&gt;
+        state
+          .toRight(&quot;Attempt to change unknown booking&quot;)
+          .map(_.copy(origin = newOrigin))
+      case DestinationChanged(newDestination) =&gt;
+        state
+          .toRight(&quot;Attempt to change unknown booking&quot;)
+          .map(_.copy(destination = newDestination))
+      case BookingCancelled =&gt;
+        state.toRight(&quot;Attempt to cancel unknown booking&quot;).map(_.copy(cancelled = true))
+    }).map(Option(_))
+}</code></pre>
+<h2><a href="#protocol" name="protocol" class="anchor"><span class="anchor-link"></span></a>Protocol</h2>
+<p>Command and reply encoding/decoding on client and server side is done by interpreting the entity algebra with <code>IncomingCommand</code> and <code>OutgoingCommand</code> contexts respectively:</p>
+<pre class="prettyprint"><button class="snippet-button copy-snippet" title="Copy snippet to clipboard">copy</button><a class="snippet-button go-to-source" href="https://github.com/endless4s/endless/tree/v0.10.1/example/src/main/scala/endless/example/protocol/BookingCommandProtocol.scala#L14-L27" target="_blank" title="Go to snippet source">source</a><code class="language-scala">class BookingCommandProtocol extends CirceCommandProtocol[BookingAlg] {
+  override def client: BookingAlg[OutgoingCommand[*]] =
+    new BookingAlg[OutgoingCommand[*]] {
+      def place(
+          bookingID: BookingID,
+          passengerCount: Int,
+          origin: LatLon,
+          destination: LatLon
+      ): OutgoingCommand[BookingAlreadyExists \/ Unit] =
+        outgoingCommand[BookingCommand, BookingAlreadyExists \/ Unit](
+          PlaceBooking(bookingID, passengerCount, origin, destination)
+        )
+
+      // ...</code></pre>
+<pre class="prettyprint"><button class="snippet-button copy-snippet" title="Copy snippet to clipboard">copy</button><a class="snippet-button go-to-source" href="https://github.com/endless4s/endless/tree/v0.10.1/example/src/main/scala/endless/example/protocol/BookingCommandProtocol.scala#L60-L70" target="_blank" title="Go to snippet source">source</a><code class="language-scala">override def server[F[_]]: Decoder[IncomingCommand[F, BookingAlg]] =
+  CirceDecoder(io.circe.Decoder[BookingCommand].map {
+    case PlaceBooking(
+          rideID: BookingID,
+          passengerCount: Int,
+          origin: LatLon,
+          destination: LatLon
+        ) =&gt;
+      incomingCommand[F, BookingAlreadyExists \/ Unit](
+        _.place(rideID, passengerCount, origin, destination)
+      )</code></pre>
+<h2><a href="#side-effects" name="side-effects" class="anchor"><span class="anchor-link"></span></a>Side-effects</h2>
+<p>We passivate bookings immediately upon cancellation, and after an hour delay for any other interaction:</p>
+<pre class="prettyprint"><button class="snippet-button copy-snippet" title="Copy snippet to clipboard">copy</button><a class="snippet-button go-to-source" href="https://github.com/endless4s/endless/tree/v0.10.1/example/src/main/scala/endless/example/logic/BookingEffector.scala#L14-L29" target="_blank" title="Go to snippet source">source</a><code class="language-scala">object BookingEffector {
+  def apply[F[_]: Logger: Monad](effector: Effector[F, Booking]): F[Unit] = {
+    import effector._
+    for {
+      maybeBooking &lt;- read
+      _ &lt;- maybeBooking match {
+        case Some(booking) =&gt;
+          Logger[F].info(show&quot;State is now $booking&quot;) &gt;&gt; (if (booking.cancelled) enablePassivation()
+                                                          else enablePassivation(passivationDelay))
+        case None =&gt; Logger[F].info(&quot;State is empty&quot;)
+      }
+    } yield ()
+  }
+
+  private val passivationDelay = 1.hour
+}</code></pre>
+<h2><a href="#testing" name="testing" class="anchor"><span class="anchor-link"></span></a>Testing</h2>
+<p>Unit testing for entity algebra implementation, event handling and effector is easy thanks to the parametric nature of <code>F</code>: </p>
+<pre class="prettyprint"><button class="snippet-button copy-snippet" title="Copy snippet to clipboard">copy</button><a class="snippet-button go-to-source" href="https://github.com/endless4s/endless/tree/v0.10.1/example/src/test/scala/endless/example/logic/BookingEntitySuite.scala#L14-L60" target="_blank" title="Go to snippet source">source</a><code class="language-scala">class BookingEntitySuite
+    extends munit.CatsEffectSuite
+    with munit.ScalaCheckEffectSuite
+    with Generators {
+  implicit private val logger: TestingLogger[IO] = TestingLogger.impl[IO]()
+  private val bookingAlg = BookingEntity(EntityT.instance[IO, Booking, BookingEvent])
+  private implicit val eventApplier: BookingEventApplier = new BookingEventApplier
+
+  test(&quot;place booking&quot;) {
+    forAllF { booking: Booking =&gt;
+      bookingAlg
+        .place(booking.id, booking.passengerCount, booking.origin, booking.destination)
+        .run(None)
+        .map {
+          case Right((events, _)) =&gt;
+            assertEquals(
+              events,
+              Chain(
+                BookingPlaced(
+                  booking.id,
+                  booking.origin,
+                  booking.destination,
+                  booking.passengerCount
+                )
+              )
+            )
+          case Left(error) =&gt; fail(error)
+        }
+        .flatMap(_ =&gt; assertIOBoolean(logger.logged.map(_.nonEmpty)))
+    }
+  }
+
+  test(&quot;change origin and destination&quot;) {
+    forAllF { (booking: Booking, newOrigin: LatLon, newDestination: LatLon) =&gt;
+      bookingAlg
+        .changeOriginAndDestination(newOrigin, newDestination)
+        .run(Some(booking))
+        .map {
+          case Right((events, _)) =&gt;
+            assertEquals(
+              events,
+              Chain[BookingEvent](OriginChanged(newOrigin), DestinationChanged(newDestination))
+            )
+          case _ =&gt; fail(&quot;unexpected&quot;)
+        }
+    }
+  }</code></pre>
+<pre class="prettyprint"><button class="snippet-button copy-snippet" title="Copy snippet to clipboard">copy</button><a class="snippet-button go-to-source" href="https://github.com/endless4s/endless/tree/v0.10.1/example/src/test/scala/endless/example/logic/BookingEventApplierSuite.scala#L9-L50" target="_blank" title="Go to snippet source">source</a><code class="language-scala">class BookingEventApplierSuite extends munit.ScalaCheckSuite with Generators {
+  property(&quot;booking placed when unknown&quot;) {
+    forAll { booking: Booking =&gt;
+      val fold = new BookingEventApplier()(
+        None,
+        BookingPlaced(booking.id, booking.origin, booking.destination, booking.passengerCount)
+      )
+      assertEquals(fold, Right(Some(booking)))
+    }
+  }
+
+  property(&quot;booking placed when known&quot;) {
+    forAll { booking: Booking =&gt;
+      val fold = new BookingEventApplier()(
+        Some(booking),
+        BookingPlaced(booking.id, booking.origin, booking.destination, booking.passengerCount)
+      )
+      assert(fold.isLeft)
+    }
+  }
+
+  property(&quot;origin changed when known&quot;) {
+    forAll { (booking: Booking, newOrigin: LatLon) =&gt;
+      val fold = new BookingEventApplier()(Some(booking), OriginChanged(newOrigin))
+      assertEquals(fold.toOption.flatMap(_.map(_.origin)), Option(newOrigin))
+    }
+  }
+
+  property(&quot;origin changed when unknown&quot;) {
+    forAll { newOrigin: LatLon =&gt;
+      val fold = new BookingEventApplier()(None, OriginChanged(newOrigin))
+      assert(fold.isLeft)
+    }
+  }
+
+  property(&quot;destination changed when unknown&quot;) {
+    forAll { newDestination: LatLon =&gt;
+      val fold = new BookingEventApplier()(None, DestinationChanged(newDestination))
+      assert(fold.isLeft)
+    }
+  }
+}</code></pre>
+<pre class="prettyprint"><button class="snippet-button copy-snippet" title="Copy snippet to clipboard">copy</button><a class="snippet-button go-to-source" href="https://github.com/endless4s/endless/tree/v0.10.1/example/src/test/scala/endless/example/logic/BookingEffectorSuite.scala#L13-L50" target="_blank" title="Go to snippet source">source</a><code class="language-scala">class BookingEffectorSuite
+    extends munit.CatsEffectSuite
+    with munit.ScalaCheckEffectSuite
+    with Generators {
+  implicit private val logger: TestingLogger[IO] = TestingLogger.impl[IO]()
+  private val effector = BookingEffector(EffectorT.instance[IO, Booking])
+
+  test(&quot;empty state log&quot;) {
+    effector
+      .runA(None)
+      .flatMap(_ =&gt; assertIO(logger.logged.map(_.map(_.message).head), &quot;State is empty&quot;))
+  }
+
+  test(&quot;some state log&quot;) {
+    forAllF { booking: Booking =&gt;
+      effector
+        .runA(Some(booking))
+        .flatMap(_ =&gt;
+          assertIOBoolean(logger.logged.map(_.map(_.message).contains(show&quot;State is now $booking&quot;)))
+        )
+    }
+  }
+
+  test(&quot;some state passivate after one hour&quot;) {
+    forAllF { booking: Booking =&gt;
+      assertIO(effector.runS(Some(booking)), PassivationState.After(1.hour))
+    }
+  }
+
+  test(&quot;passivate immediately when cancelled&quot;) {
+    forAllF { booking: Booking =&gt;
+      assertIO(
+        effector.runS(Some(booking.copy(cancelled = true))),
+        PassivationState.After(Duration.Zero)
+      )
+    }
+  }
+}</code></pre>
+<p><code>CommandProtocol</code> is more effectively covered via component tests as it is mostly about serialization and switchboard boilerplate.</p>
+</div>
+<div>
+<a href="https://github.com/endless4s/endless/tree/v0.10.1/documentation/src/main/paradox/example.md" title="Edit this page" class="md-source-file md-edit">
+Edit this page
+</a>
+</div>
+<div class="print-only">
+<span class="md-source-file md-version">
+0.10.1
+</span>
+</div>
+</article>
+</div>
+</div>
+</main>
+<footer class="md-footer">
+<div class="md-footer-nav">
+<nav class="md-footer-nav__inner md-grid">
+<a href="runtime.html" title="Akka runtime" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+<div class="md-flex__cell md-flex__cell--shrink">
+<i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
+</div>
+<div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+<span class="md-flex__ellipsis">
+<span class="md-footer-nav__direction">
+Previous
+</span>
+Akka runtime
+</span>
+</div>
+</a>
+<a href="reference.html" title="Reference" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+<div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+<span class="md-flex__ellipsis">
+<span class="md-footer-nav__direction">
+Next
+</span>
+Reference
+</span>
+</div>
+<div class="md-flex__cell md-flex__cell--shrink">
+<i class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
+</div>
+</a>
+</nav>
+</div>
+<div class="md-footer-meta md-typeset">
+<div class="md-footer-meta__inner md-grid">
+<div class="md-footer-copyright">
+Powered by
+<a href="https://github.com/lightbend/paradox">Paradox</a>
+and
+<a href="https://jonas.github.io/paradox-material-theme/">Paradox Material Theme</a>
+
+</div>
+<div class="md-footer-social">
+<a href="https://github.com/endless4s/endless" class="md-footer-social__link fa fa-github"></a>
+</div>
+
+</div>
+</div>
+</footer>
+
+</div>
+<script src="assets/javascripts/application.583bbe55.js"></script>
+<script src="assets/javascripts/paradox-material-theme.js"></script>
+<script>app.initialize({version:"0.17",url:{base:"."}})</script>
+<script type="text/javascript" src="lib/prettify/prettify.js"></script>
+<script type="text/javascript" src="lib/prettify/lang-scala.js"></script>
+<script type="text/javascript">
+document.addEventListener("DOMContentLoaded", function(event) {
+window.prettyPrint && prettyPrint();
+});
+</script>
+<script>!function(e,a,t,n,o,c,i){e.GoogleAnalyticsObject=o,e.ga=e.ga||function(){(e.ga.q=e.ga.q||[]).push(arguments)},e.ga.l=1*new Date,c=a.createElement(t),i=a.getElementsByTagName(t)[0],c.async=1,c.src="https://www.google-analytics.com/analytics.js",i.parentNode.insertBefore(c,i)}(window,document,"script",0,"ga"),ga("create","G-KKHFXG4VB4"),ga("set","anonymizeIp",!0),ga("send","pageview");var links=document.getElementsByTagName("a");Array.prototype.map.call(links,function(e){e.host!=document.location.host&&e.addEventListener("click",function(){var a=e.getAttribute("data-md-action")||"follow";ga("send","event","outbound",a,e.href)})});if(document.forms.search){var query=document.forms.search.query;query.addEventListener("blur",function(){if(this.value){var e=document.location.pathname;ga("send","pageview",e+"?q="+this.value)}})}</script>
+
+</body>
+</html>

@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+<meta name="description" content="documentation">
+<meta name="generator" content="Paradox, paradox-material-theme=0.6.0, mkdocs-material=3.0.3">
+
+<meta name="lang:clipboard.copy" content="Copy to clipboard">
+<meta name="lang:clipboard.copied" content="Copied to clipboard">
+<meta name="lang:search.language" content="">
+<meta name="lang:search.pipeline.stopwords" content="true">
+<meta name="lang:search.pipeline.trimmer" content="true">
+<meta name="lang:search.result.none" content="No matching documents">
+<meta name="lang:search.result.one" content="1 matching document">
+<meta name="lang:search.result.other" content="# matching documents">
+<meta name="lang:search.tokenizer" content="[\s\-]+">
+
+
+<meta name="description" content="documentation">
+<link rel="shortcut icon" href="favicon.png">
+<title>Akka runtime · </title>
+<link rel="stylesheet" href="assets/stylesheets/application.451f80e5.css">
+<link rel="stylesheet" href="assets/stylesheets/application-palette.22915126.css">
+<meta name="theme-color" content="#546e7a" />
+<link rel="stylesheet" href="lib/material__tabs/dist/mdc.tabs.min.css">
+<link rel="stylesheet" href="lib/prettify/prettify.css">
+<script src="assets/javascripts/modernizr.1aa3b519.js"></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Overpass:300,400,400i,700|Overpass+Mono">
+<style>
+body,input{font-family:"Overpass","Helvetica Neue",Helvetica,Arial,sans-serif}
+code,kbd,pre{font-family:"Overpass Mono","Courier New",Courier,monospace}
+</style>
+<link rel="stylesheet" href="assets/fonts/font-awesome.css">
+<link rel="stylesheet" href="assets/fonts/material-icons.css">
+<link rel="stylesheet" href="assets/stylesheets/paradox-material-theme.css">
+</head>
+<body
+data-md-color-primary="blue-grey"
+data-md-color-accent="red"
+>
+<input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+<input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+<label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
+<header class="md-header" data-md-component="header">
+<nav class="md-header-nav md-grid">
+<div class="md-flex">
+<div class="md-flex__cell md-flex__cell--shrink">
+<a href="index.html" title="" class="md-header-nav__button md-logo">
+<img src="logo-symbol-only.svg" width="24" height="24">
+</a>
+</div>
+<div class="md-flex__cell md-flex__cell--shrink">
+<label class="md-icon md-icon--menu md-header-nav__button" for="__drawer"></label>
+</div>
+<div class="md-flex__cell md-flex__cell--stretch">
+<div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
+<span class="md-header-nav__topic">
+</span>
+<span class="md-header-nav__topic">
+Akka runtime
+</span>
+</div>
+</div>
+<div class="md-flex__cell md-flex__cell--shrink">
+<label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
+<div class="md-search" data-md-component="search" role="dialog">
+<label class="md-search__overlay" for="__search"></label>
+<div class="md-search__inner" role="search">
+<form class="md-search__form" name="search">
+<input type="text" class="md-search__input" name="query" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query" data-md-state="active">
+<label class="md-icon md-search__icon" for="__search"></label>
+<button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">&#xE5CD;</button>
+</form>
+<div class="md-search__output">
+<div class="md-search__scrollwrap" data-md-scrollfix>
+<div class="md-search-result" data-md-component="result">
+<div class="md-search-result__meta">
+Type to start searching
+</div>
+<ol class="md-search-result__list"></ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+<div class="md-flex__cell md-flex__cell--shrink">
+<div class="md-header-nav__source">
+<a href="https://github.com/endless4s/endless"
+title="Go to repository"
+class="md-source"
+data-md-source="github">
+<div class="md-source__icon">
+<i class="fa fa-github"></i>
+</div>
+<div class="md-source__repository">
+endless4s/endless
+</div>
+</a>
+
+</div>
+</div>
+</div>
+</nav>
+</header>
+
+<div class="md-container">
+<main class="md-main">
+<div class="md-main__inner md-grid" data-md-component="container">
+<div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav class="md-nav md-nav--primary" data-md-level="0" style="visibility: hidden">
+<label class="md-nav__title md-nav__title--site" for="drawer">
+<a href="index.html" title="" class="md-nav__button md-logo">
+<span class="md-nav__button md-logo">
+<img src="logo-symbol-only.svg" width="24" height="24">
+</a>
+<a href="index.html" title="">
+</a>
+</label>
+<div class="md-nav__source">
+<a href="https://github.com/endless4s/endless"
+title="Go to repository"
+class="md-source"
+data-md-source="github">
+<div class="md-source__icon">
+<i class="fa fa-github"></i>
+</div>
+<div class="md-source__repository">
+endless4s/endless
+</div>
+</a>
+
+</div>
+<ul>
+  <li><a href="getting-started.html" class="page">Getting Started</a></li>
+  <li><a href="nutshell.html" class="page">In a nutshell</a></li>
+  <li><a href="typeclasses.html" class="page">Typeclasses</a>
+  <ul>
+    <li><a href="repository.html" class="page">Repository</a></li>
+    <li><a href="entity.html" class="page">Entity</a></li>
+    <li><a href="applier.html" class="page">EventApplier</a></li>
+    <li><a href="protocol.html" class="page">CommandProtocol</a></li>
+    <li><a href="router.html" class="page">CommandRouter</a></li>
+    <li><a href="effector.html" class="page">Effector</a></li>
+    <li><a href="name.html" class="page">EntityNameProvider</a></li>
+    <li><a href="id.html" class="page">EntityIDEncoder</a></li>
+  </ul></li>
+  <li><a href="runtime.html" class="active page">Akka runtime</a></li>
+  <li><a href="example.html" class="page">Example app</a></li>
+  <li><a href="reference.html" class="page">Reference</a></li>
+  <li><a href="inspiration.html" class="page">Inspiration</a></li>
+</ul>
+<nav class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">Table of contents</label>
+<ul>
+  <li><a href="runtime.html#akka-runtime" class="header">Akka runtime</a>
+  <ul>
+    <li><a href="runtime.html#deployentity" class="header"><code>deployEntity</code></a></li>
+    <li><a href="runtime.html#internals" class="header">Internals</a></li>
+  </ul></li>
+</ul>
+</nav>
+
+</nav>
+<ul style="display: none">
+<li class="md-nav__item md-version" id="project.version">
+<label class="md-nav__link" for="__version">
+<i class="md-icon" title="Version">label_outline</i> 0.10.1
+</label>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">Table of contents</label>
+<ul>
+  <li><a href="runtime.html#akka-runtime" class="header">Akka runtime</a>
+  <ul>
+    <li><a href="runtime.html#deployentity" class="header"><code>deployEntity</code></a></li>
+    <li><a href="runtime.html#internals" class="header">Internals</a></li>
+  </ul></li>
+</ul>
+</nav>
+
+</div>
+</div>
+</div>
+<div class="md-content">
+<article class="md-content__inner md-typeset">
+<div class="md-content__searchable">
+<h1><a href="#akka-runtime" name="akka-runtime" class="anchor"><span class="anchor-link"></span></a>Akka runtime</h1>
+<p>Once required interpreters and typeclass instances have been defined, deploying an entity with Akka boils down to a single call to <a href="api/runtime/endless/runtime/akka/Deployer.html" title="endless.runtime.akka.Deployer"><code>deployEntity</code></a>. This naturally requires an actor system and the cluster sharding extension in implicit scope.</p>
+<h2><a href="#deployentity" name="deployentity" class="anchor"><span class="anchor-link"></span></a><code>deployEntity</code></h2>
+<p>This function brings everything together and delivers a cats effect <a href="https://typelevel.org/cats-effect/docs/std/resource" title="Resource" target="_blank" rel="noopener noreferrer">Resource</a> with the repository instance in context <code>F</code> bundled with the ref to the shard region actor returned by the call to Akka&rsquo;s <a href="https://doc.akka.io/docs/akka/current/typed/cluster-sharding.html#basic-example" title="ClusterSharding.init" target="_blank" rel="noopener noreferrer">ClusterSharding.init</a>.</p>
+<p>The following snippet is the scaffolding for the library&rsquo;s sample application, a simple API to manage bookings:</p>
+<pre class="prettyprint"><button class="snippet-button copy-snippet" title="Copy snippet to clipboard">copy</button><a class="snippet-button go-to-source" href="https://github.com/endless4s/endless/tree/v0.10.1/example/src/main/scala/endless/example/ExampleApp.scala#L39-L66" target="_blank" title="Go to snippet source">source</a><code class="language-scala">def apply(implicit actorSystem: ActorSystem[Nothing]): IO[Resource[IO, Server]] = {
+  implicit val clusterSharding: ClusterSharding = ClusterSharding(actorSystem)
+  implicit val commandProtocol: BookingCommandProtocol = new BookingCommandProtocol
+  implicit val eventApplier: BookingEventApplier = new BookingEventApplier
+  implicit val bookingEntityNameProvider: EntityNameProvider[BookingID] = () =&gt; &quot;booking&quot;
+  implicit val idEncoder: EntityIDEncoder[BookingID] = _.id.toString
+  implicit val askTimeout: Timeout = Timeout(10.seconds)
+
+  Slf4jLogger
+    .create[IO]
+    .map(implicit logger =&gt; {
+      deployEntity[IO, Booking, BookingEvent, BookingID, BookingAlg, BookingRepositoryAlg](
+        BookingEntity(_),
+        BookingRepository(_),
+        BookingEffector(_)
+      ).map { case (bookingRepository, _) =&gt;
+        httpService(bookingRepository)
+      }
+    })
+    .map(
+      _.flatMap(service =&gt;
+        BlazeServerBuilder[IO]
+          .bindHttp(8080, &quot;localhost&quot;)
+          .withHttpApp(service)
+          .resource
+      )
+    )
+}</code></pre>
+<p><code>deployEntity</code> is parameterized with the context <code>F</code> and the various involved types: <code>S</code> for entity state, <code>E</code> for events, <code>ID</code> for entity ID and <code>Alg</code> &amp; <code>RepositoryAlg</code> for entity and repository algebras respectively (both higher-kinded type constructors).</p>
+<p>Entity algebra <code>Alg</code> must also be equipped with an instance of <code>FunctorK</code> to support natural transformations and <a href="router.html">CommandRouter</a>. </p>
+<p>In order to bridge Akka&rsquo;s implicit asynchronicity with the side-effect free context <code>F</code> used for algebras, it requires <a href="https://typelevel.org/cats-effect/docs/typeclasses/async" title="Async" target="_blank" rel="noopener noreferrer">Async</a> from <code>F</code>. This makes it possible to use the <a href="https://typelevel.org/cats-effect/docs/std/dispatcher" title="Dispatcher" target="_blank" rel="noopener noreferrer">Dispatcher</a> mechanism for running the command handling monadic chain synchronously from within the actor thread.</p>
+<p><code>Logger</code> from <a href="https://github.com/typelevel/log4cats" title="`log4cats`" target="_blank" rel="noopener noreferrer"><code>log4cats</code></a> is also required as the library supports basic logging capabilities.</p><div class="callout warning "><div class="callout-title">Important</div>
+<p><code>deployEntity</code> needs to be called upon application startup, before joining the cluster as the <code>ClusterSharding</code> extension needs to know about the various entity types beforehand.</p></div>
+<h2><a href="#internals" name="internals" class="anchor"><span class="anchor-link"></span></a>Internals</h2>
+<h3><a href="#protocol" name="protocol" class="anchor"><span class="anchor-link"></span></a>Protocol</h3>
+<p>Thanks to the <a href="protocol.html">CommandProtocol</a> instance, entity algebra calls can be &ldquo;materialized&rdquo; into concrete commands and replies which are carried in an internal protobuf binary format <a href="https://github.com/endless4s/endless/tree/v0.10.1/runtime/src/main/protobuf/command.proto">command.proto</a>. <a href="/runtime/src/main/scala/endless/runtime/akka/ShardingCommandRouter.scala">ShardingCommandRouter</a> takes care of delivering the commands to the right entity and returning the reply simply by using Akka&rsquo;s <code>ask</code>.</p>
+<h3><a href="#deployer" name="deployer" class="anchor"><span class="anchor-link"></span></a>Deployer</h3>
+<p>Internally, <a href="https://github.com/endless4s/endless/tree/v0.10.1/runtime/src/main/scala/endless/runtime/akka/Deployer.scala">deployEntity</a> uses Akka <a href="https://doc.akka.io/docs/akka/current/typed/persistence.html#example-and-core-api" title="EventSourcedBehavior" target="_blank" rel="noopener noreferrer">EventSourcedBehavior</a> DSL to configure the entity in the following way:</p>
+<h4><a href="#command-handler" name="command-handler" class="anchor"><span class="anchor-link"></span></a>Command handler</h4>
+<ol>
+  <li>use <a href="protocol.html">CommandProtocol.server</a> to decode the command and invoke the corresponding algebra logic, interpreted internally with <a href="api/core/endless/core/interpret/EntityT.html" title="endless.core.interpret.EntityT"><code>EntityT</code></a>. Interpretation of the monadic chain occurs, leading to one or more events and a return value.</li>
+  <li>hand in produced events to Akka&rsquo;s <code>Effect.persist</code>.</li>
+  <li>trigger any side effects in <a href="effector.html">Effector</a> by interpreting it with <a href="api/core/endless/core/interpret/EffectorT.html" title="endless.core.interpret.EffectorT"><code>EffectorT</code></a> and running it synchronously with <code>Dispatcher</code> from within <code>thenRun</code></li>
+  <li>encode the reply and feed it into <code>thenReply</code></li>
+</ol>
+<h4><a href="#event-handler" name="event-handler" class="anchor"><span class="anchor-link"></span></a>Event handler</h4>
+<p>This is simply a synchronous run of <a href="applier.html">EventApplier</a> (using <code>Dispatcher</code>). Left values are translated into thrown exceptions as Akka doesn&rsquo;t give us other means to deal with event handling errors.</p>
+<h4><a href="#recovery" name="recovery" class="anchor"><span class="anchor-link"></span></a>Recovery</h4>
+<p>Upon successful recovery, we log an info entry and run the effector, while we log a warning entry upon recovery failure.</p><div class="callout note tip"><div class="callout-title">Custom behavior</div>
+<p>The built-in behavior is further customizable via a <code>customizeBehavior</code> function parameter that can be optionally passed into <code>deployEntity</code>. </p></div><div class="callout warning "><div class="callout-title">Compatibility</div>
+<p>Since Akka <a href="https://doc.akka.io/docs/akka/current/common/binary-compatibility-rules.html#mixed-versioning-is-not-allowed">does not allow mixed versions</a> in a project, Akka dependencies of <code>endless-runtime-akka</code> are marked a <code>Provided</code>. This means that your application <code>libraryDependencies</code> needs to directly include Akka as a dependency. The minimal supported Akka version is 2.6.5. </p></div>
+</div>
+<div>
+<a href="https://github.com/endless4s/endless/tree/v0.10.1/documentation/src/main/paradox/runtime.md" title="Edit this page" class="md-source-file md-edit">
+Edit this page
+</a>
+</div>
+<div class="print-only">
+<span class="md-source-file md-version">
+0.10.1
+</span>
+</div>
+</article>
+</div>
+</div>
+</main>
+<footer class="md-footer">
+<div class="md-footer-nav">
+<nav class="md-footer-nav__inner md-grid">
+<a href="id.html" title="EntityIDEncoder" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+<div class="md-flex__cell md-flex__cell--shrink">
+<i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
+</div>
+<div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+<span class="md-flex__ellipsis">
+<span class="md-footer-nav__direction">
+Previous
+</span>
+EntityIDEncoder
+</span>
+</div>
+</a>
+<a href="example.html" title="Example app" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+<div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+<span class="md-flex__ellipsis">
+<span class="md-footer-nav__direction">
+Next
+</span>
+Example app
+</span>
+</div>
+<div class="md-flex__cell md-flex__cell--shrink">
+<i class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
+</div>
+</a>
+</nav>
+</div>
+<div class="md-footer-meta md-typeset">
+<div class="md-footer-meta__inner md-grid">
+<div class="md-footer-copyright">
+Powered by
+<a href="https://github.com/lightbend/paradox">Paradox</a>
+and
+<a href="https://jonas.github.io/paradox-material-theme/">Paradox Material Theme</a>
+
+</div>
+<div class="md-footer-social">
+<a href="https://github.com/endless4s/endless" class="md-footer-social__link fa fa-github"></a>
+</div>
+
+</div>
+</div>
+</footer>
+
+</div>
+<script src="assets/javascripts/application.583bbe55.js"></script>
+<script src="assets/javascripts/paradox-material-theme.js"></script>
+<script>app.initialize({version:"0.17",url:{base:"."}})</script>
+<script type="text/javascript" src="lib/prettify/prettify.js"></script>
+<script type="text/javascript" src="lib/prettify/lang-scala.js"></script>
+<script type="text/javascript">
+document.addEventListener("DOMContentLoaded", function(event) {
+window.prettyPrint && prettyPrint();
+});
+</script>
+<script>!function(e,a,t,n,o,c,i){e.GoogleAnalyticsObject=o,e.ga=e.ga||function(){(e.ga.q=e.ga.q||[]).push(arguments)},e.ga.l=1*new Date,c=a.createElement(t),i=a.getElementsByTagName(t)[0],c.async=1,c.src="https://www.google-analytics.com/analytics.js",i.parentNode.insertBefore(c,i)}(window,document,"script",0,"ga"),ga("create","G-KKHFXG4VB4"),ga("set","anonymizeIp",!0),ga("send","pageview");var links=document.getElementsByTagName("a");Array.prototype.map.call(links,function(e){e.host!=document.location.host&&e.addEventListener("click",function(){var a=e.getAttribute("data-md-action")||"follow";ga("send","event","outbound",a,e.href)})});if(document.forms.search){var query=document.forms.search.query;query.addEventListener("blur",function(){if(this.value){var e=document.location.pathname;ga("send","pageview",e+"?q="+this.value)}})}</script>
+
+</body>
+</html>
