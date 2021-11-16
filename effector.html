@@ -170,7 +170,7 @@ endless4s/endless
 <ul style="display: none">
 <li class="md-nav__item md-version" id="project.version">
 <label class="md-nav__link" for="__version">
-<i class="md-icon" title="Version">label_outline</i> 0.11.0
+<i class="md-icon" title="Version">label_outline</i> 0.0.0+1-ccd068c6*
 </label>
 </li>
 </ul>
@@ -208,7 +208,7 @@ trait Passivator[F[_]] {
 trait Effector[F[_], S] extends StateReader[F, S] with Passivator[F]
 </code></pre>
 <p><a href="api/core/endless/core/typeclass/entity/Effector.html" title="endless.core.typeclass.entity.Effector"><code>Effector</code></a> is used to describe side effects occurring <strong>after</strong> event persistence and entity recovery. </p>
-<p>Side-effects are typically asynchronous operations such as kafka writes, outgoing REST requests, and <a href="https://doc.akka.io/docs/akka/current/typed/cluster-sharding.html#passivation">entity passivation</a> (flushing out of memory). <code>Effector</code> is typically used in a <code>Effector =&gt; F[Unit]</code> function provided upon entity deployment (e.g. <a href="https://github.com/endless4s/endless/tree/v0.11.0/example/src/main/scala/endless/example/logic/BookingEffector.scala">BookingEffector</a>).</p>
+<p>Side-effects are typically asynchronous operations such as kafka writes, outgoing REST requests, and <a href="https://doc.akka.io/docs/akka/current/typed/cluster-sharding.html#passivation">entity passivation</a> (flushing out of memory). <code>Effector</code> is typically used in a <code>Effector =&gt; F[Unit]</code> function provided upon entity deployment (e.g. <a href="https://github.com/endless4s/endless/tree/master/example/src/main/scala/endless/example/logic/BookingEffector.scala">BookingEffector</a>).</p>
 <h2><a href="#state-derived-side-effects" name="state-derived-side-effects" class="anchor"><span class="anchor-link"></span></a>State-derived side-effects</h2>
 <p><a href="api/core/endless/core/typeclass/entity/StateReader.html" title="endless.core.typeclass.entity.StateReader"><code>StateReader</code></a> allows reading the updated entity state after event persistence or recovery. </p><div class="callout note tip"><div class="callout-title">At least once delivery with zero latency</div>
 <p>For most side-effects, <em>at least once</em> delivery guarantees are required. This can be achieved with a projection, however at the cost of some incurred latency. Effective latency depends on the database and event journal implementation used, as well as the projection throughput. An effective alternative to using a projection is to track successful delivery in the entity state itself, in particular if the side-effect has some domain meaning. The following pattern can be used:</p>
@@ -221,13 +221,13 @@ trait Effector[F[_], S] extends StateReader[F, S] with Passivator[F]
 <p><a href="api/core/endless/core/typeclass/entity/Passivator.html" title="endless.core.typeclass.entity.Passivator"><code>Passivator</code></a> allow fine grain control over passivation. In certain domains, entities can evolve into &ldquo;dormant&rdquo; states (e.g. after a <code>BookingCancelled</code> event) for which it is beneficial to trigger passivation, either immediately or after a certain delay. This enables proactive optimization of cluster resources. </p>
 </div>
 <div>
-<a href="https://github.com/endless4s/endless/tree/v0.11.0/documentation/src/main/paradox/effector.md" title="Edit this page" class="md-source-file md-edit">
+<a href="https://github.com/endless4s/endless/tree/master/documentation/src/main/paradox/effector.md" title="Edit this page" class="md-source-file md-edit">
 Edit this page
 </a>
 </div>
 <div class="print-only">
 <span class="md-source-file md-version">
-0.11.0
+0.0.0+1-ccd068c6*
 </span>
 </div>
 </article>
