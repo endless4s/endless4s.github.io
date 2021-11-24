@@ -162,7 +162,7 @@ endless4s/endless
 <ul style="display: none">
 <li class="md-nav__item md-version" id="project.version">
 <label class="md-nav__link" for="__version">
-<i class="md-icon" title="Version">label_outline</i> 0.0.0+1-82a96a5b*
+<i class="md-icon" title="Version">label_outline</i> 0.12.0
 </label>
 </li>
 </ul>
@@ -180,18 +180,18 @@ endless4s/endless
 </code></pre>
 <p><a href="api/core/endless/core/typeclass/protocol/CommandProtocol.html" title="endless.core.typeclass.protocol.CommandProtocol"><code>CommandProtocol</code></a> is to be implemented for each entity algebra. It provides a <code>client</code> interpretation wrapping each function into a <a href="api/core/endless/core/typeclass/protocol/OutgoingCommand.html" title="endless.core.typeclass.protocol.OutgoingCommand"><code>OutgoingCommand</code></a> context and a <code>server</code> decoder which can deserialize an incoming command into <a href="api/core/endless/core/typeclass/protocol/IncomingCommand.html" title="endless.core.typeclass.protocol.IncomingCommand"><code>IncomingCommand</code></a>.</p>
 <p><code>OutgoingCommand</code> is able to encode the command into a binary representation ready to be sent over the wire and also decode the expected subsequent reply. <code>IncomingCommand</code> is able to decode the incoming command, invoke the corresponding handler and encode the reply.</p>
-<p>In other words, <code>client</code> materializes algebra invocations into concrete serializable outgoing commands and <code>server</code> acts as a switchboard for incoming commands. See <a href="https://github.com/endless4s/endless/tree/master/example/src/main/scala/endless/example/protocol/BookingCommandProtocol.scala">BookingCommandProtocol</a> for a concrete example.</p><div class="callout note info"><div class="callout-title">Explicit or implicit representations</div>
+<p>In other words, <code>client</code> materializes algebra invocations into concrete serializable outgoing commands and <code>server</code> acts as a switchboard for incoming commands. See <a href="https://github.com/endless4s/endless/tree/v0.12.0/example/src/main/scala/endless/example/protocol/BookingCommandProtocol.scala">BookingCommandProtocol</a> for a concrete example.</p><div class="callout note info"><div class="callout-title">Explicit or implicit representations</div>
 <p><code>CommandProtocol</code> is the entry point for implementations to map algebra entries to concrete commands and replies. We tend to prefer explicit materialization for migration safety but nothing prevents protocol implementers to opt for automatic serialization via macros. We provide helpers for definition of binary protocols in <code>endless-scodec-helpers</code> and JSON protocols in <code>endless-circe-helpers</code>. </p></div><div class="callout note tip"><div class="callout-title">Testing</div>
-<p>Command protocols can be tested in isolation via synchronous round-trip exercise of the journey <em>client invocation -&gt; command materialization -&gt; command encoding -&gt; command decoding -&gt; behavior invocation -&gt; reply materialization -&gt; reply encoding -&gt; reply decoding</em>. See <a href="https://github.com/endless4s/endless/tree/master/example/src/test/scala/endless/example/protocol/BookingCommandProtocolSuite.scala">BookingCommandProtocolSuite</a> for an example.</p></div>
+<p>Command protocols can be tested in isolation via synchronous round-trip exercise of the journey <em>client invocation -&gt; command materialization -&gt; command encoding -&gt; command decoding -&gt; behavior invocation -&gt; reply materialization -&gt; reply encoding -&gt; reply decoding</em>. See <a href="https://github.com/endless4s/endless/tree/v0.12.0/example/src/test/scala/endless/example/protocol/BookingCommandProtocolSuite.scala">BookingCommandProtocolSuite</a> for an example.</p></div>
 </div>
 <div>
-<a href="https://github.com/endless4s/endless/tree/master/documentation/src/main/paradox/protocol.md" title="Edit this page" class="md-source-file md-edit">
+<a href="https://github.com/endless4s/endless/tree/v0.12.0/documentation/src/main/paradox/protocol.md" title="Edit this page" class="md-source-file md-edit">
 Edit this page
 </a>
 </div>
 <div class="print-only">
 <span class="md-source-file md-version">
-0.0.0+1-82a96a5b*
+0.12.0
 </span>
 </div>
 </article>
