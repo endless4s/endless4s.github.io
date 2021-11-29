@@ -142,7 +142,7 @@ endless4s/endless
 <ul>
   <li><a href="getting-started.html" class="page">Getting Started</a></li>
   <li><a href="nutshell.html" class="page">In a nutshell</a></li>
-  <li><a href="typeclasses.html" class="page">Typeclasses</a>
+  <li><a href="abstractions.html" class="page">Abstractions</a>
   <ul>
     <li><a href="repository.html" class="page">Repository</a></li>
     <li><a href="entity.html" class="page">Entity</a></li>
@@ -165,7 +165,7 @@ endless4s/endless
 <ul style="display: none">
 <li class="md-nav__item md-version" id="project.version">
 <label class="md-nav__link" for="__version">
-<i class="md-icon" title="Version">label_outline</i> 0.12.1
+<i class="md-icon" title="Version">label_outline</i> 0.0.0+1-73947c0d*
 </label>
 </li>
 </ul>
@@ -180,16 +180,16 @@ endless4s/endless
   def apply(state: S, event: E): String \/ S
 }
 </code></pre>
-<p>Application of an event on the entity state (aka. <em>folding</em> the events over the state) is defined with an <a href="api/core/endless/core/typeclass/event/EventApplier.html" title="endless.core.typeclass.event.EventApplier"><code>EventApplier</code></a> instance, parametrized with the state <code>S</code> and events <code>E</code>. This is a function of the state/event tuple leading to either a new version of the state or an error (<code>\/</code> is a type alias for <code>Either</code>).</p>
+<p>Application of an event on the entity state (aka. <em>folding</em> the events over the state) is defined with an <a href="api/core/endless/core/event/EventApplier.html" title="endless.core.event.EventApplier"><code>EventApplier</code></a> instance, parametrized with the state <code>S</code> and events <code>E</code>. This is a function of the state/event tuple leading to either a new version of the state or an error (<code>\/</code> is a type alias for <code>Either</code>).</p>
 </div>
 <div>
-<a href="https://github.com/endless4s/endless/tree/v0.12.1/documentation/src/main/paradox/applier.md" title="Edit this page" class="md-source-file md-edit">
+<a href="https://github.com/endless4s/endless/tree/master/documentation/src/main/paradox/applier.md" title="Edit this page" class="md-source-file md-edit">
 Edit this page
 </a>
 </div>
 <div class="print-only">
 <span class="md-source-file md-version">
-0.12.1
+0.0.0+1-73947c0d*
 </span>
 </div>
 </article>
