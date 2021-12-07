@@ -157,6 +157,7 @@ endless4s/endless
   <li><a href="example.html" class="page">Example app</a></li>
   <li><a href="reference.html" class="page">Reference</a></li>
   <li><a href="inspiration.html" class="page">Inspiration</a></li>
+  <li><a href="discord.html" class="page">Questions &amp; answers</a></li>
 </ul>
 <nav class="md-nav md-nav--secondary">
 </nav>
@@ -165,7 +166,7 @@ endless4s/endless
 <ul style="display: none">
 <li class="md-nav__item md-version" id="project.version">
 <label class="md-nav__link" for="__version">
-<i class="md-icon" title="Version">label_outline</i> 0.14.0
+<i class="md-icon" title="Version">label_outline</i> 0.0.0+1-a40f47c4*
 </label>
 </li>
 </ul>
@@ -177,7 +178,7 @@ endless4s/endless
 <div class="md-content__searchable">
 <h1><a href="#getting-started" name="getting-started" class="anchor"><span class="anchor-link"></span></a>Getting Started</h1>
 <p>Add the following dependency to your <code>build.sbt</code> file:</p>
-<pre class="prettyprint"><code class="language-scala">libraryDependencies += &quot;io.github.endless4s&quot; %% &quot;endless-core&quot; % &quot;0.14.0&quot;
+<pre class="prettyprint"><code class="language-scala">libraryDependencies += &quot;io.github.endless4s&quot; %% &quot;endless-core&quot; % &quot;0.0.0+1-a40f47c4-SNAPSHOT&quot;
 </code></pre>
 <p>This will pull in the core endless module, containing typeclasses and interpreters. You should add this as a dependency to your domain project.</p>
 <p>Akka runtime is available in <code>endless-runtime-akka</code>, and some extra helpers for circe in <code>endless-circe-helpers</code>: add those as dependencies to your infrastructure module.</p>
@@ -185,13 +186,13 @@ endless4s/endless
 <p>Since Akka <a href="https://doc.akka.io/docs/akka/current/common/binary-compatibility-rules.html#mixed-versioning-is-not-allowed">does not allow mixed versions</a> in a project, Akka dependencies of <code>endless-runtime-akka</code> are marked a <code>Provided</code>. This means that your application <code>libraryDependencies</code> needs to directly include Akka as a dependency. The minimal supported Akka version is 2.6.5. </p></div>
 </div>
 <div>
-<a href="https://github.com/endless4s/endless/tree/v0.14.0/documentation/src/main/paradox/getting-started.md" title="Edit this page" class="md-source-file md-edit">
+<a href="https://github.com/endless4s/endless/tree/master/documentation/src/main/paradox/getting-started.md" title="Edit this page" class="md-source-file md-edit">
 Edit this page
 </a>
 </div>
 <div class="print-only">
 <span class="md-source-file md-version">
-0.14.0
+0.0.0+1-a40f47c4*
 </span>
 </div>
 </article>
