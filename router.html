@@ -166,7 +166,7 @@ endless4s/endless
 <ul style="display: none">
 <li class="md-nav__item md-version" id="project.version">
 <label class="md-nav__link" for="__version">
-<i class="md-icon" title="Version">label_outline</i> 0.14.1
+<i class="md-icon" title="Version">label_outline</i> 0.0.0+1-3ee91a70*
 </label>
 </li>
 </ul>
@@ -182,19 +182,19 @@ endless4s/endless
 }
 </code></pre>
 <p><a href="api/core/endless/core/protocol/CommandRouter.html" title="endless.core.protocol.CommandRouter"><code>CommandRouter</code></a> represents the ability to deliver a command to its target entity. It provides a natural transformation for an entity ID type, that can map the entity algebra interpreted by <code>CommandProtocol.client</code> into a context <code>OutgoingCommand[*]</code> back to <code>F</code>. This transformation is precisely sending out the command and retrieving the response.</p>
-<p>There is a built-in implementation for Akka Cluster Sharding: <a href="https://github.com/endless4s/endless/tree/v0.14.1/runtime/src/main/scala/endless/runtime/akka/ShardingCommandRouter.scala">ShardingCommandRouter</a></p>
+<p>There is a built-in implementation for Akka Cluster Sharding: <a href="https://github.com/endless4s/endless/tree/master/runtime/src/main/scala/endless/runtime/akka/ShardingCommandRouter.scala">ShardingCommandRouter</a></p>
 <p>In order to support natural transformations, a <a href="https://typelevel.org/cats-tagless/" title="cats-tagless" target="_blank" rel="noopener noreferrer">cats-tagless</a> <a href="https://typelevel.org/cats-tagless/typeclasses.html" title="FunctorK" target="_blank" rel="noopener noreferrer">FunctorK</a> instance must be provided for the entity algebra. This is easy to achieve thanks to built-in derivation macros:</p>
 <pre class="prettyprint"><code class="language-scala">implicit lazy val functorKInstance: cats.tagless.FunctorK[BookingAlg] = cats.tagless.Derive.functorK[BookingAlg]
 </code></pre>
 </div>
 <div>
-<a href="https://github.com/endless4s/endless/tree/v0.14.1/documentation/src/main/paradox/router.md" title="Edit this page" class="md-source-file md-edit">
+<a href="https://github.com/endless4s/endless/tree/master/documentation/src/main/paradox/router.md" title="Edit this page" class="md-source-file md-edit">
 Edit this page
 </a>
 </div>
 <div class="print-only">
 <span class="md-source-file md-version">
-0.14.1
+0.0.0+1-3ee91a70*
 </span>
 </div>
 </article>
