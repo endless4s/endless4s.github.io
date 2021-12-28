@@ -173,7 +173,7 @@ endless4s/endless
 <ul style="display: none">
 <li class="md-nav__item md-version" id="project.version">
 <label class="md-nav__link" for="__version">
-<i class="md-icon" title="Version">label_outline</i> 0.14.3
+<i class="md-icon" title="Version">label_outline</i> 0.0.0+1-b9a89836*
 </label>
 </li>
 </ul>
@@ -208,7 +208,7 @@ trait EventWriter[F[_], E] {
 }
 trait Entity[F[_], S, E] extends StateReader[F, S] with EventWriter[F, E] with Monad[F]
 </code></pre>
-<p><a href="api/core/endless/core/entity/Entity.html" title="endless.core.entity.Entity"><code>Entity</code></a> is parametrized with entity state <code>S</code> and events <code>E</code>. It is a typeclass which represents reader-writer monad capabilities for <code>F</code> with event-sourcing semantics, i.e. the abilities to read current entity state from the context and write events into it. <code>Entity</code> is typically used by the entity algebra command handling interpreter (e.g. <a href="https://github.com/endless4s/endless/tree/v0.14.3/example/src/main/scala/endless/example/logic/BookingEntity.scala">BookingEntity</a>). </p>
+<p><a href="api/core/endless/core/entity/Entity.html" title="endless.core.entity.Entity"><code>Entity</code></a> is parametrized with entity state <code>S</code> and events <code>E</code>. It is a typeclass which represents reader-writer monad capabilities for <code>F</code> with event-sourcing semantics, i.e. the abilities to read current entity state from the context and write events into it. <code>Entity</code> is typically used by the entity algebra command handling interpreter (e.g. <a href="https://github.com/endless4s/endless/tree/master/example/src/main/scala/endless/example/logic/BookingEntity.scala">BookingEntity</a>). </p>
 <h2><a href="#functional-event-sourcing" name="functional-event-sourcing" class="anchor"><span class="anchor-link"></span></a>Functional event sourcing</h2>
 <p><em>Reader-writer</em> is a natural fit for describing event sourcing behavior: the monadic chain represents event sequencing and corresponding evolution of the state (see also <a href="https://pavkin.ru/aecor-part-2/">here</a> and <a href="https://www.youtube.com/watch?v=kDkRRkkVlxQ">here</a>).</p>
 <p>Advantages of this abstraction are:</p>
@@ -229,13 +229,13 @@ trait Entity[F[_], S, E] extends StateReader[F, S] with EventWriter[F, E] with M
 </ul></div>
 </div>
 <div>
-<a href="https://github.com/endless4s/endless/tree/v0.14.3/documentation/src/main/paradox/entity.md" title="Edit this page" class="md-source-file md-edit">
+<a href="https://github.com/endless4s/endless/tree/master/documentation/src/main/paradox/entity.md" title="Edit this page" class="md-source-file md-edit">
 Edit this page
 </a>
 </div>
 <div class="print-only">
 <span class="md-source-file md-version">
-0.14.3
+0.0.0+1-b9a89836*
 </span>
 </div>
 </article>
