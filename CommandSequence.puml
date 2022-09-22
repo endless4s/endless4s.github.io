@@ -1,0 +1,70 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+title Implementation sequence diagram for ""repository.bookingFor(id).place(booking)""
+skinparam handwritten true
+skinparam TitleFontName Virgil 3 YOFF
+skinparam NoteFontName  Virgil 3 YOFF
+skinparam sequence {
+ ParticipantFontName Virgil 3 YOFF
+ ActorFontName Virgil 3 YOFF
+ ReferenceFontName Virgil 3 YOFF
+ MessageFontName Virgil 3 YOFF
+ ArrowFontName Virgil 3 YOFF
+}
+participant "Domain logic" as Domain
+participant BookingRepository as BookingRepository
+participant RepositoryT as RepositoryT
+participant BookingCommandProtocol as BookingCommandProtocol1
+participant "BookingAlg[F]" as BookingAlg
+participant "OutgoingCommand" as OutgoingCommand
+participant ShardingCommandRouter as ShardingCommandRouter
+participant ClusterSharding as ClusterSharding
+actor Ask as Ask
+actor Entity as Entity
+participant IncomingCommand as IncomingCommand
+participant BookingCommandProtocol as BookingCommandProtocol2
+participant BookingEntity as BookingEntity
+participant EntityT as EntityT
+participant "Akka Effect DSL" as Effect
+autonumber
+autoactivate on
+
+Domain -> BookingRepository: bookingFor(id)
+BookingRepository -> RepositoryT: entityFor(id)
+RepositoryT -> BookingCommandProtocol1: client()
+return client = BookingAlg[OutgoingCommand[*]]
+RepositoryT -> ShardingCommandRouter: routerForID(id)
+return nat = ""OutgoingCommand[*] ~> F""
+return BookingAlg[F]
+return BookingAlg[F]
+note right: ""client.mapK(nat)""\nAkka's ask is embedded via a natural transformation
+Domain -> BookingAlg: place(booking)
+BookingAlg -> OutgoingCommand: payload()
+return Array[Byte]
+BookingAlg -> ClusterSharding: entityRefFor(key, id)
+return EntityRef
+BookingAlg -> Ask: entityRef.ask(id, payload)
+Ask o->o Entity: Command
+note over Ask, Entity: actor message routed\nthrough cluster
+Entity -> BookingCommandProtocol2: server.decode(command.payload)
+return IncomingCommand
+Entity -> RepositoryT: runCommand(state, command)
+RepositoryT -> IncomingCommand: runWith(bookingEntity)
+IncomingCommand -> BookingEntity: place(booking)
+return F[AlreadyExists.type \/ Unit]
+return EntityT[F, BookingState, BookingEvent, command.Reply]
+RepositoryT -> EntityT: run(state)
+return (events, reply)
+return (events, reply)
+Entity -> Effect: persist(events)
+return effect
+Entity -> IncomingCommand: encode(reply)
+return Array[Byte]
+Entity -> Effect: thenReply(command.replyTo, Reply(payload))
+return replyEffect
+return Reply(replyPayload)
+return Reply(replyPayload)
+BookingAlg -> OutgoingCommand: replyDecoder.decode(replyPayload)
+return AlreadyExists.type \/ Unit
+return F[AlreadyExists.type \/ Unit]
+@enduml
