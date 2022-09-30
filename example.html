@@ -180,7 +180,7 @@ endless4s/endless
 <ul style="display: none">
 <li class="md-nav__item md-version" id="project.version">
 <label class="md-nav__link" for="__version">
-<i class="md-icon" title="Version">label_outline</i> 0.0.0+1-d4280a64*
+<i class="md-icon" title="Version">label_outline</i> 0.0.0+1-ca5c829d*
 </label>
 </li>
 </ul>
@@ -217,7 +217,7 @@ endless4s/endless
 <p>Endless example application is a small API for managing imaginary bookings for passenger trips from some origin to some destination. It can be found in <code>endless-example</code> and can be run directly: <code>sbt run</code>. </p>
 <h2><a href="#api" name="api" class="anchor"><span class="anchor-link"></span></a>API</h2>
 <p>It has a simple CRUD API for those bookings:</p>
-<pre class="prettyprint"><button class="snippet-button copy-snippet" title="Copy snippet to clipboard">copy</button><a class="snippet-button go-to-source" href="https://github.com/endless4s/endless/tree/master/example/src/main/scala/endless/example/ExampleApp.scala#L81-L88" target="_blank" title="Go to snippet source">source</a><code class="language-scala">private def httpService(bookingRepository: BookingRepositoryAlg[IO]): HttpApp[IO] = HttpRoutes
+<pre class="prettyprint"><button class="snippet-button copy-snippet" title="Copy snippet to clipboard">copy</button><a class="snippet-button go-to-source" href="https://github.com/endless4s/endless/tree/master/example/src/main/scala/endless/example/ExampleApp.scala#L80-L87" target="_blank" title="Go to snippet source">source</a><code class="language-scala">private def httpService(bookingRepository: BookingRepositoryAlg[IO]): HttpApp[IO] = HttpRoutes
   .of[IO] {
     case req @ POST -&gt; Root / &quot;booking&quot;                =&gt; postBooking(bookingRepository, req)
     case GET -&gt; Root / &quot;booking&quot; / UUIDVar(id)         =&gt; getBooking(bookingRepository, id)
@@ -227,7 +227,7 @@ endless4s/endless
   .orNotFound</code></pre>
 <h2><a href="#scaffolding" name="scaffolding" class="anchor"><span class="anchor-link"></span></a>Scaffolding</h2>
 <p>The application is assembled via a call to <a href="api/runtime/endless/runtime/akka/Deployer$$deployEntity.html" title="endless.runtime.akka.Deployer.deployEntity"><code>deployEntity</code></a> (see <a href="runtime.html">runtime</a> for more details)</p>
-<pre class="prettyprint"><button class="snippet-button copy-snippet" title="Copy snippet to clipboard">copy</button><a class="snippet-button go-to-source" href="https://github.com/endless4s/endless/tree/master/example/src/main/scala/endless/example/ExampleApp.scala#L49-L77" target="_blank" title="Go to snippet source">source</a><code class="language-scala">def apply(implicit actorSystem: ActorSystem[Nothing]): IO[Resource[IO, Server]] = {
+<pre class="prettyprint"><button class="snippet-button copy-snippet" title="Copy snippet to clipboard">copy</button><a class="snippet-button go-to-source" href="https://github.com/endless4s/endless/tree/master/example/src/main/scala/endless/example/ExampleApp.scala#L48-L76" target="_blank" title="Go to snippet source">source</a><code class="language-scala">def apply(implicit actorSystem: ActorSystem[Nothing]): IO[Resource[IO, Server]] = {
   implicit val clusterSharding: ClusterSharding = ClusterSharding(actorSystem)
   implicit val commandProtocol: BookingCommandProtocol = new BookingCommandProtocol
   implicit val eventApplier: BookingEventApplier = new BookingEventApplier
@@ -257,10 +257,14 @@ endless4s/endless
     )
 }</code></pre>
 <h2><a href="#algebras" name="algebras" class="anchor"><span class="anchor-link"></span></a>Algebras</h2>
-<p>You might have spotted the two algebra types in the snippet above, which are defined like so:</p>
+<p>You might have spotted the two algebra types in the snippet above: </p>
+<h3><a href="#repository" name="repository" class="anchor"><span class="anchor-link"></span></a>Repository</h3>
 <pre class="prettyprint"><button class="snippet-button copy-snippet" title="Copy snippet to clipboard">copy</button><a class="snippet-button go-to-source" href="https://github.com/endless4s/endless/tree/master/example/src/main/scala/endless/example/algebra/BookingRepositoryAlg.scala#L6-L8" target="_blank" title="Go to snippet source">source</a><code class="language-scala">trait BookingRepositoryAlg[F[_]] {
   def bookingFor(bookingID: BookingID): BookingAlg[F]
 }</code></pre>
+<p>Here&rsquo;s the sequence of operations happening behind the scenes when retrieving an instance of entity algebra: </p>
+<img src="sequences/BookingRepository.png"/>
+<h3><a href="#entity" name="entity" class="anchor"><span class="anchor-link"></span></a>Entity</h3>
 <pre class="prettyprint"><button class="snippet-button copy-snippet" title="Copy snippet to clipboard">copy</button><a class="snippet-button go-to-source" href="https://github.com/endless4s/endless/tree/master/example/src/main/scala/endless/example/algebra/BookingAlg.scala#L12-L29" target="_blank" title="Go to snippet source">source</a><code class="language-scala">trait BookingAlg[F[_]] {
   def place(
       bookingID: BookingID,
@@ -403,6 +407,9 @@ endless4s/endless
       incomingCommand[F, BookingAlreadyExists \/ Unit](
         _.place(bookingID, time, passengerCount, origin, destination)
       )</code></pre>
+<p>Here&rsquo;s an illustration of the chain of interactions taking place when placing a booking, both from the client and the server side:</p>
+<img src="sequences/PlaceBookingClient.png"/>
+<img src="sequences/PlaceBookingServer.png"/>
 <h2><a href="#side-effects" name="side-effects" class="anchor"><span class="anchor-link"></span></a>Side-effects</h2>
 <p>We describe <em>availability</em> process as well as explicit entity passivation using <code>Effector</code>: </p>
 <pre class="prettyprint"><button class="snippet-button copy-snippet" title="Copy snippet to clipboard">copy</button><a class="snippet-button go-to-source" href="https://github.com/endless4s/endless/tree/master/example/src/main/scala/endless/example/logic/BookingEffector.scala#L17-L49" target="_blank" title="Go to snippet source">source</a><code class="language-scala">object BookingEffector {
@@ -723,7 +730,7 @@ Edit this page
 </div>
 <div class="print-only">
 <span class="md-source-file md-version">
-0.0.0+1-d4280a64*
+0.0.0+1-ca5c829d*
 </span>
 </div>
 </article>
