@@ -146,6 +146,7 @@ endless4s/endless
   <ul>
     <li><a href="repository.html" class="page">Repository</a></li>
     <li><a href="entity.html" class="page">Entity</a></li>
+    <li><a href="durable-entity.html" class="page">Durable entity</a></li>
     <li><a href="applier.html" class="page">EventApplier</a></li>
     <li><a href="protocol.html" class="page">CommandProtocol</a></li>
     <li><a href="router.html" class="page">CommandRouter</a></li>
@@ -174,7 +175,7 @@ endless4s/endless
 <ul style="display: none">
 <li class="md-nav__item md-version" id="project.version">
 <label class="md-nav__link" for="__version">
-<i class="md-icon" title="Version">label_outline</i> 0.16.0
+<i class="md-icon" title="Version">label_outline</i> 0.0.0+1-cbe25d63*
 </label>
 </li>
 </ul>
@@ -206,26 +207,40 @@ endless4s/endless
 <h2><a href="#deployentity" name="deployentity" class="anchor"><span class="anchor-link"></span></a><code>deployEntity</code></h2>
 <p>This function brings everything together and delivers a cats effect <a href="https://typelevel.org/cats-effect/docs/std/resource" title="Resource" target="_blank" rel="noopener noreferrer">Resource</a> with the repository instance in context <code>F</code> bundled with the ref to the shard region actor returned by the call to Akka&rsquo;s <a href="https://doc.akka.io/docs/akka/current/typed/cluster-sharding.html#basic-example" title="ClusterSharding.init" target="_blank" rel="noopener noreferrer">ClusterSharding.init</a>.</p>
 <p>The following snippet is the scaffolding for the library&rsquo;s sample application, a simple API to manage bookings:</p>
-<pre class="prettyprint"><button class="snippet-button copy-snippet" title="Copy snippet to clipboard">copy</button><a class="snippet-button go-to-source" href="https://github.com/endless4s/endless/tree/v0.16.0/example/src/main/scala/endless/example/ExampleApp.scala#L48-L76" target="_blank" title="Go to snippet source">source</a><code class="language-scala">def apply(implicit actorSystem: ActorSystem[Nothing]): IO[Resource[IO, Server]] = {
+<pre class="prettyprint"><button class="snippet-button copy-snippet" title="Copy snippet to clipboard">copy</button><a class="snippet-button go-to-source" href="https://github.com/endless4s/endless/tree/master/example/src/main/scala/endless/example/ExampleApp.scala#L46-L88" target="_blank" title="Go to snippet source">source</a><code class="language-scala">def apply(implicit actorSystem: ActorSystem[Nothing]): IO[Resource[IO, Server]] = {
   implicit val clusterSharding: ClusterSharding = ClusterSharding(actorSystem)
-  implicit val commandProtocol: BookingCommandProtocol = new BookingCommandProtocol
+  implicit val bookingCommandProtocol: BookingCommandProtocol = new BookingCommandProtocol
+  implicit val vehicleCommandProtocol: VehicleCommandProtocol = new VehicleCommandProtocol
   implicit val eventApplier: BookingEventApplier = new BookingEventApplier
   implicit val bookingEntityNameProvider: EntityNameProvider[BookingID] = () =&gt; &quot;booking&quot;
-  implicit val idEncoder: EntityIDCodec[BookingID] =
-    EntityIDCodec(_.id.toString, BookingID.fromString)
+  implicit val vehicleEntityNameProvider: EntityNameProvider[VehicleID] = () =&gt; &quot;vehicle&quot;
+  implicit val bookingIDEncoder: EntityIDCodec[BookingID] =
+    EntityIDCodec(_.id.show, BookingID.fromString)
+  implicit val vehicleIDEncoder: EntityIDCodec[VehicleID] =
+    EntityIDCodec(_.id.show, VehicleID.fromString)
   implicit val askTimeout: Timeout = Timeout(10.seconds)
 
   Slf4jLogger
     .create[IO]
-    .map(implicit logger =&gt; {
-      deployEntity[IO, Booking, BookingEvent, BookingID, BookingAlg, BookingRepositoryAlg](
-        BookingEntity(_),
-        BookingRepository(_),
-        (effector, _) =&gt; BookingEffector(effector)
-      ).map { case (bookingRepository, _) =&gt;
-        httpService(bookingRepository)
-      }
-    })
+    .map { implicit logger: Logger[IO] =&gt;
+      Resource
+        .both(
+          deployEntity[IO, Booking, BookingEvent, BookingID, BookingAlg, BookingRepositoryAlg](
+            BookingEntity(_),
+            BookingRepository(_),
+            (effector, _) =&gt; BookingEffector(effector)
+          ),
+          deployDurableEntity[IO, Vehicle, VehicleID, VehicleAlg, VehicleRepositoryAlg](
+            VehicleEntity(_),
+            VehicleRepository(_),
+            (_, _) =&gt; EffectorT.unit,
+            customizeBehavior = (_, behavior) =&gt; behavior.snapshotAdapter(new VehicleStateAdapter)
+          )
+        )
+        .map { case ((bookingRepository, _), (vehicleRepository, _)) =&gt;
+          httpService(bookingRepository, vehicleRepository)
+        }
+    }
     .map(
       _.flatMap(service =&gt;
         BlazeServerBuilder[IO]
@@ -239,12 +254,13 @@ endless4s/endless
 <p>Entity algebra <code>Alg</code> must also be equipped with an instance of <code>FunctorK</code> to support natural transformations and <a href="router.html">CommandRouter</a>. </p>
 <p>In order to bridge Akka&rsquo;s implicit asynchronicity with the side-effect free context <code>F</code> used for algebras, it requires <a href="https://typelevel.org/cats-effect/docs/typeclasses/async" title="Async" target="_blank" rel="noopener noreferrer">Async</a> from <code>F</code>. This makes it possible to use the <a href="https://typelevel.org/cats-effect/docs/std/dispatcher" title="Dispatcher" target="_blank" rel="noopener noreferrer">Dispatcher</a> mechanism for running the command handling monadic chain synchronously from within the actor thread.</p>
 <p><code>Logger</code> from <a href="https://github.com/typelevel/log4cats" title="`log4cats`" target="_blank" rel="noopener noreferrer"><code>log4cats</code></a> is also required as the library supports basic logging capabilities.</p><div class="callout warning "><div class="callout-title">Important</div>
-<p><code>deployEntity</code> needs to be called upon application startup, before joining the cluster as the <code>ClusterSharding</code> extension needs to know about the various entity types beforehand.</p></div>
+<p><code>deployEntity</code> needs to be called upon application startup, before joining the cluster as the <code>ClusterSharding</code> extension needs to know about the various entity types beforehand.</p></div><div class="callout note "><div class="callout-title">Durable entity</div>
+<p>The equivalent method for durable entities is <a href="api/runtime/endless/runtime/akka/DurableDeployer.html" title="endless.runtime.akka.DurableDeployer"><code>deployDurableEntity</code></a>.</p></div>
 <h2><a href="#internals" name="internals" class="anchor"><span class="anchor-link"></span></a>Internals</h2>
 <h3><a href="#protocol" name="protocol" class="anchor"><span class="anchor-link"></span></a>Protocol</h3>
-<p>Thanks to the <a href="protocol.html">CommandProtocol</a> instance, entity algebra calls can be &ldquo;materialized&rdquo; into concrete commands and replies which are carried in an internal protobuf binary format <a href="https://github.com/endless4s/endless/tree/v0.16.0/runtime/src/main/protobuf/command.proto">command.proto</a>. <a href="/runtime/src/main/scala/endless/runtime/akka/ShardingCommandRouter.scala">ShardingCommandRouter</a> takes care of delivering the commands to the right entity and returning the reply simply by using Akka&rsquo;s <code>ask</code>.</p>
+<p>Thanks to the <a href="protocol.html">CommandProtocol</a> instance, entity algebra calls can be &ldquo;materialized&rdquo; into concrete commands and replies which are carried in an internal protobuf binary format <a href="https://github.com/endless4s/endless/tree/master/runtime/src/main/protobuf/command.proto">command.proto</a>. <a href="/runtime/src/main/scala/endless/runtime/akka/ShardingCommandRouter.scala">ShardingCommandRouter</a> takes care of delivering the commands to the right entity and returning the reply simply by using Akka&rsquo;s <code>ask</code>.</p>
 <h3><a href="#deployer" name="deployer" class="anchor"><span class="anchor-link"></span></a>Deployer</h3>
-<p>Internally, <a href="https://github.com/endless4s/endless/tree/v0.16.0/runtime/src/main/scala/endless/runtime/akka/Deployer.scala">deployEntity</a> uses Akka <a href="https://doc.akka.io/docs/akka/current/typed/persistence.html#example-and-core-api" title="EventSourcedBehavior" target="_blank" rel="noopener noreferrer">EventSourcedBehavior</a> DSL to configure the entity in the following way:</p>
+<p>Internally, <a href="https://github.com/endless4s/endless/tree/master/runtime/src/main/scala/endless/runtime/akka/Deployer.scala">deployEntity</a> uses Akka <a href="https://doc.akka.io/docs/akka/current/typed/persistence.html#example-and-core-api" title="EventSourcedBehavior" target="_blank" rel="noopener noreferrer">EventSourcedBehavior</a> DSL to configure the entity in the following way (for <a href="https://github.com/endless4s/endless/tree/master/runtime/src/main/scala/endless/runtime/akka/DurableDeployer.scala">deployDurableEntity</a>, this is <a href="https://doc.akka.io/docs/akka/current/typed/durable-state/persistence.html#example-and-core-api">DurableStateBehavior</a>):</p>
 <h4><a href="#command-handler" name="command-handler" class="anchor"><span class="anchor-link"></span></a>Command handler</h4>
 <ol>
   <li>use <a href="protocol.html">CommandProtocol.server</a> to decode the command and invoke the corresponding algebra logic, interpreted internally with <a href="api/core/endless/core/interpret/EntityT.html" title="endless.core.interpret.EntityT"><code>EntityT</code></a>. Interpretation of the monadic chain occurs, leading to one or more events and a return value.</li>
@@ -257,16 +273,16 @@ endless4s/endless
 <h4><a href="#recovery" name="recovery" class="anchor"><span class="anchor-link"></span></a>Recovery</h4>
 <p>Upon successful recovery, we log an info entry and run the effector, while we log a warning entry upon recovery failure.</p><div class="callout note tip"><div class="callout-title">Custom behavior</div>
 <p>The built-in behavior is further customizable via a <code>customizeBehavior</code> function parameter that can be optionally passed into <code>deployEntity</code>. </p></div><div class="callout warning "><div class="callout-title">Compatibility</div>
-<p>Since Akka <a href="https://doc.akka.io/docs/akka/current/common/binary-compatibility-rules.html#mixed-versioning-is-not-allowed">does not allow mixed versions</a> in a project, Akka dependencies of <code>endless-runtime-akka</code> are marked a <code>Provided</code>. This means that your application <code>libraryDependencies</code> needs to directly include Akka as a dependency. The minimal supported Akka version is 2.6.5. </p></div>
+<p>Since Akka <a href="https://doc.akka.io/docs/akka/current/common/binary-compatibility-rules.html#mixed-versioning-is-not-allowed">does not allow mixed versions</a> in a project, Akka dependencies of <code>endless-runtime-akka</code> are marked a <code>Provided</code>. This means that your application <code>libraryDependencies</code> needs to directly include Akka as a dependency. The minimal supported Akka version is 2.6.17. </p></div>
 </div>
 <div>
-<a href="https://github.com/endless4s/endless/tree/v0.16.0/documentation/src/main/paradox/runtime.md" title="Edit this page" class="md-source-file md-edit">
+<a href="https://github.com/endless4s/endless/tree/master/documentation/src/main/paradox/runtime.md" title="Edit this page" class="md-source-file md-edit">
 Edit this page
 </a>
 </div>
 <div class="print-only">
 <span class="md-source-file md-version">
-0.16.0
+0.0.0+1-cbe25d63*
 </span>
 </div>
 </article>

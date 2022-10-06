@@ -23,7 +23,7 @@
 
 <meta name="description" content="Scala library to describe event sourced entities using tagless-final algebras, running with built-in implementations for Akka.">
 <link rel="shortcut icon" href="favicon.png">
-<title>Inspiration · </title>
+<title>Durable entity · </title>
 <link rel="stylesheet" href="assets/stylesheets/application.451f80e5.css">
 <link rel="stylesheet" href="assets/stylesheets/application-palette.22915126.css">
 <meta name="theme-color" content="#546e7a" />
@@ -62,7 +62,7 @@ data-md-color-accent="red"
 <span class="md-header-nav__topic">
 </span>
 <span class="md-header-nav__topic">
-Inspiration
+Durable entity
 </span>
 </div>
 </div>
@@ -146,7 +146,7 @@ endless4s/endless
   <ul>
     <li><a href="repository.html" class="page">Repository</a></li>
     <li><a href="entity.html" class="page">Entity</a></li>
-    <li><a href="durable-entity.html" class="page">Durable entity</a></li>
+    <li><a href="durable-entity.html" class="active page">Durable entity</a></li>
     <li><a href="applier.html" class="page">EventApplier</a></li>
     <li><a href="protocol.html" class="page">CommandProtocol</a></li>
     <li><a href="router.html" class="page">CommandRouter</a></li>
@@ -157,19 +157,10 @@ endless4s/endless
   <li><a href="runtime.html" class="page">Akka runtime</a></li>
   <li><a href="example.html" class="page">Example app</a></li>
   <li><a href="reference.html" class="page">Reference</a></li>
-  <li><a href="inspiration.html" class="active page">Inspiration</a></li>
+  <li><a href="inspiration.html" class="page">Inspiration</a></li>
   <li><a href="discord.html" class="page">Questions &amp; answers</a></li>
 </ul>
 <nav class="md-nav md-nav--secondary">
-<label class="md-nav__title" for="__toc">Table of contents</label>
-<ul>
-  <li><a href="inspiration.html#inspiration" class="header">Inspiration</a>
-  <ul>
-    <li><a href="inspiration.html#implicit-commands-replies" class="header">Implicit commands &amp; replies</a></li>
-    <li><a href="inspiration.html#aecor" class="header">Aecor</a></li>
-    <li><a href="inspiration.html#bridging-the-gap" class="header">Bridging the gap</a></li>
-  </ul></li>
-</ul>
 </nav>
 
 </nav>
@@ -183,39 +174,28 @@ endless4s/endless
 </div>
 </div>
 </div>
-<div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
-<div class="md-sidebar__scrollwrap">
-<div class="md-sidebar__inner">
-<nav class="md-nav md-nav--secondary">
-<label class="md-nav__title" for="__toc">Table of contents</label>
-<ul>
-  <li><a href="inspiration.html#inspiration" class="header">Inspiration</a>
-  <ul>
-    <li><a href="inspiration.html#implicit-commands-replies" class="header">Implicit commands &amp; replies</a></li>
-    <li><a href="inspiration.html#aecor" class="header">Aecor</a></li>
-    <li><a href="inspiration.html#bridging-the-gap" class="header">Bridging the gap</a></li>
-  </ul></li>
-</ul>
-</nav>
-
-</div>
-</div>
-</div>
 <div class="md-content">
 <article class="md-content__inner md-typeset">
 <div class="md-content__searchable">
-<h1><a href="#inspiration" name="inspiration" class="anchor"><span class="anchor-link"></span></a>Inspiration</h1>
-<p>Our journey towards elevation of our event-sourcing code abstraction level started with an inheritance-based model, that we described in <a href="https://medium.com/bestmile/domain-driven-event-sourcing-with-akka-typed-5f5b8bbfb823">this article</a>. We introduced <code>EntityCommand</code> and <code>EntityEvent</code> traits, which allowed us in turn to define some<code>CommandProcessor</code> and <code>EventApplier</code> constructs with generic implementations and mappings for Akka. This was already a good step in the right direction as it allowed us to host command handling and event handling logic in the domain, free from any Akka dependencies. </p>
-<h2><a href="#implicit-commands-replies" name="implicit-commands-replies" class="anchor"><span class="anchor-link"></span></a>Implicit commands &amp; replies</h2>
-<p>However, with this approach, commands and replies are still an integral part of the domain model. And if you think about it, such models and associated mappings to/from values do not add any value to domain expression, rather the contrary. Domain code is more compact if we can use straight algebras and values, without concern for the underlying necessary reification to cross node boundaries in the cluster. It was also always an open question for us how to best integrate event sourcing within functional codebases. Since event-sourcing looks a lot like a reader-writer monad, we felt there was some potential there. </p>
-<h2><a href="#aecor" name="aecor" class="anchor"><span class="anchor-link"></span></a>Aecor</h2>
-<p>At this point, we ran into the outstanding work done by Denis Mikhaylov &amp; contributors on <a href="https://github.com/notxcain/aecor">Aecor</a> as well as the excellent <a href="https://pavkin.ru/aecor-intro/">blog series</a> by Vladimir Pavkin. This was a real eye-opener, and we highly recommend the read!</p>
-<p>However, we could not use the library directly for a number of reasons, chiefly because we are attached to keeping the layer above Akka as lightweight as possible and we want to keep control on serialization aspects. There also are other more subtle differences: for instance we consider command rejections (and more generally, &ldquo;business errors&rdquo;) as first-order values, therefore opting for <code>Either</code> for replies. In <em>endless</em>, we&rsquo;ve also tried to stick to close to DDD &amp; Akka nomenclature as much as possible. </p>
-<h2><a href="#bridging-the-gap" name="bridging-the-gap" class="anchor"><span class="anchor-link"></span></a>Bridging the gap</h2>
-<p>By providing of typeclasses allowing for expressive description of entity behavior and embedding common event sourcing patterns into these abstractions, we hope to make it more approachable to enjoy side-effect free programming while still benefiting from the great power of Akka. </p>
+<h1><a href="#durable-entity" name="durable-entity" class="anchor"><span class="anchor-link"></span></a>Durable entity</h1>
+<pre class="prettyprint"><code class="language-scala">trait StateReader[F[_], S] {
+  def read: F[S]
+}
+trait StateWriter[F[_], S] {
+  def write(s: S): F[Unit]
+  def modify(f: S =&gt; S): F[Unit]
+  def modifyF(f: S =&gt; F[S]): F[Unit]
+}
+trait DurableEntity[F[_], S]
+    extends StateReader[F, S]
+    with StateWriter[F, S]
+</code></pre>
+<p><a href="api/core/endless/core/entity/DurableEntity.html" title="endless.core.entity.DurableEntity"><code>DurableEntity</code></a> is parametrized with entity state <code>S</code>. It is a typeclass which represents reader-writer capabilities for <code>F</code> with direct state persistence semantics, i.e., the ability to store the full state after processing each command instead of a sequence of events.</p>
+<p>For some use cases, e.g. in scenarios with high-frequency updates where each individual update doesn&rsquo;t carry valuable meaning to the domain, events aren&rsquo;t relevant and flashing the full state is preferable.</p>
+<p>Such &ldquo;durable&rdquo; entities still benefit from sharding, passivation, rebalancing, automatic recovery etc. while keeping the persistence model simple. In effect, this is a way to implement CRUD-like distributed entities while retaining the advantages of actors, such as the ability to actively schedule side-effects, precise state-machine semantics, consistent distributed in-memory state, etc. </p>
 </div>
 <div>
-<a href="https://github.com/endless4s/endless/tree/master/documentation/src/main/paradox/inspiration.md" title="Edit this page" class="md-source-file md-edit">
+<a href="https://github.com/endless4s/endless/tree/master/documentation/src/main/paradox/durable-entity.md" title="Edit this page" class="md-source-file md-edit">
 Edit this page
 </a>
 </div>
@@ -231,7 +211,7 @@ Edit this page
 <footer class="md-footer">
 <div class="md-footer-nav">
 <nav class="md-footer-nav__inner md-grid">
-<a href="reference.html" title="Reference" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+<a href="entity.html" title="Entity" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
 <div class="md-flex__cell md-flex__cell--shrink">
 <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
 </div>
@@ -240,17 +220,17 @@ Edit this page
 <span class="md-footer-nav__direction">
 Previous
 </span>
-Reference
+Entity
 </span>
 </div>
 </a>
-<a href="discord.html" title="Questions & answers" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+<a href="applier.html" title="EventApplier" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
 <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
 <span class="md-flex__ellipsis">
 <span class="md-footer-nav__direction">
 Next
 </span>
-Questions & answers
+EventApplier
 </span>
 </div>
 <div class="md-flex__cell md-flex__cell--shrink">
