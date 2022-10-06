@@ -146,7 +146,6 @@ endless4s/endless
   <ul>
     <li><a href="repository.html" class="page">Repository</a></li>
     <li><a href="entity.html" class="page">Entity</a></li>
-    <li><a href="durable-entity.html" class="page">Durable entity</a></li>
     <li><a href="applier.html" class="page">EventApplier</a></li>
     <li><a href="protocol.html" class="page">CommandProtocol</a></li>
     <li><a href="router.html" class="page">CommandRouter</a></li>
@@ -181,7 +180,7 @@ endless4s/endless
 <ul style="display: none">
 <li class="md-nav__item md-version" id="project.version">
 <label class="md-nav__link" for="__version">
-<i class="md-icon" title="Version">label_outline</i> 0.0.0+1-cbe25d63*
+<i class="md-icon" title="Version">label_outline</i> 0.0.0+1-887929f6*
 </label>
 </li>
 </ul>
@@ -215,63 +214,39 @@ endless4s/endless
 <article class="md-content__inner md-typeset">
 <div class="md-content__searchable">
 <h1><a href="#example-app" name="example-app" class="anchor"><span class="anchor-link"></span></a>Example app</h1>
-<p>Endless example application is a small API for managing imaginary bookings for passenger trips from some origin to some destination, as well as tracking positions and speeds of vehicles. It can be found in <code>endless-example</code> and can be run directly: <code>sbt run</code>. </p>
+<p>Endless example application is a small API for managing imaginary bookings for passenger trips from some origin to some destination. It can be found in <code>endless-example</code> and can be run directly: <code>sbt run</code>. </p>
 <h2><a href="#api" name="api" class="anchor"><span class="anchor-link"></span></a>API</h2>
-<p>It has a simple CRUD API for bookings and vehicles:</p>
-<pre class="prettyprint"><button class="snippet-button copy-snippet" title="Copy snippet to clipboard">copy</button><a class="snippet-button go-to-source" href="https://github.com/endless4s/endless/tree/master/example/src/main/scala/endless/example/ExampleApp.scala#L92-L109" target="_blank" title="Go to snippet source">source</a><code class="language-scala">private def httpService(
-    bookingRepository: BookingRepositoryAlg[IO],
-    vehicleRepository: VehicleRepositoryAlg[IO]
-): HttpApp[IO] = HttpRoutes
+<p>It has a simple CRUD API for those bookings:</p>
+<pre class="prettyprint"><button class="snippet-button copy-snippet" title="Copy snippet to clipboard">copy</button><a class="snippet-button go-to-source" href="https://github.com/endless4s/endless/tree/master/example/src/main/scala/endless/example/ExampleApp.scala#L80-L87" target="_blank" title="Go to snippet source">source</a><code class="language-scala">private def httpService(bookingRepository: BookingRepositoryAlg[IO]): HttpApp[IO] = HttpRoutes
   .of[IO] {
     case req @ POST -&gt; Root / &quot;booking&quot;                =&gt; postBooking(bookingRepository, req)
     case GET -&gt; Root / &quot;booking&quot; / UUIDVar(id)         =&gt; getBooking(bookingRepository, id)
     case req @ PATCH -&gt; Root / &quot;booking&quot; / UUIDVar(id) =&gt; patchBooking(bookingRepository, req, id)
     case POST -&gt; Root / &quot;booking&quot; / UUIDVar(id) / &quot;cancel&quot; =&gt; cancelBooking(bookingRepository, id)
-    case GET -&gt; Root / &quot;vehicle&quot; / UUIDVar(id) / &quot;speed&quot; =&gt; getVehicleSpeed(vehicleRepository, id)
-    case GET -&gt; Root / &quot;vehicle&quot; / UUIDVar(id) / &quot;position&quot; =&gt;
-      getVehiclePosition(vehicleRepository, id)
-    case req @ POST -&gt; Root / &quot;vehicle&quot; / UUIDVar(id) / &quot;speed&quot; =&gt;
-      setVehicleSpeed(vehicleRepository, id, req)
-    case req @ POST -&gt; Root / &quot;vehicle&quot; / UUIDVar(id) / &quot;position&quot; =&gt;
-      setVehiclePosition(vehicleRepository, id, req)
   }
   .orNotFound</code></pre>
 <h2><a href="#scaffolding" name="scaffolding" class="anchor"><span class="anchor-link"></span></a>Scaffolding</h2>
-<p>The application is assembled via calls to <a href="api/runtime/endless/runtime/akka/Deployer$$deployEntity.html" title="endless.runtime.akka.Deployer.deployEntity"><code>deployEntity</code></a> (for bookings) and <a href="api/runtime/endless/runtime/akka/Deployer$$deployDurableEntity.html" title="endless.runtime.akka.Deployer.deployDurableEntity"><code>deployDurableEntity</code></a> (for vehicles) (see <a href="runtime.html">runtime</a> for more details)</p>
-<pre class="prettyprint"><button class="snippet-button copy-snippet" title="Copy snippet to clipboard">copy</button><a class="snippet-button go-to-source" href="https://github.com/endless4s/endless/tree/master/example/src/main/scala/endless/example/ExampleApp.scala#L46-L88" target="_blank" title="Go to snippet source">source</a><code class="language-scala">def apply(implicit actorSystem: ActorSystem[Nothing]): IO[Resource[IO, Server]] = {
+<p>The application is assembled via a call to <a href="api/runtime/endless/runtime/akka/Deployer$$deployEntity.html" title="endless.runtime.akka.Deployer.deployEntity"><code>deployEntity</code></a> (see <a href="runtime.html">runtime</a> for more details)</p>
+<pre class="prettyprint"><button class="snippet-button copy-snippet" title="Copy snippet to clipboard">copy</button><a class="snippet-button go-to-source" href="https://github.com/endless4s/endless/tree/master/example/src/main/scala/endless/example/ExampleApp.scala#L48-L76" target="_blank" title="Go to snippet source">source</a><code class="language-scala">def apply(implicit actorSystem: ActorSystem[Nothing]): IO[Resource[IO, Server]] = {
   implicit val clusterSharding: ClusterSharding = ClusterSharding(actorSystem)
-  implicit val bookingCommandProtocol: BookingCommandProtocol = new BookingCommandProtocol
-  implicit val vehicleCommandProtocol: VehicleCommandProtocol = new VehicleCommandProtocol
+  implicit val commandProtocol: BookingCommandProtocol = new BookingCommandProtocol
   implicit val eventApplier: BookingEventApplier = new BookingEventApplier
   implicit val bookingEntityNameProvider: EntityNameProvider[BookingID] = () =&gt; &quot;booking&quot;
-  implicit val vehicleEntityNameProvider: EntityNameProvider[VehicleID] = () =&gt; &quot;vehicle&quot;
-  implicit val bookingIDEncoder: EntityIDCodec[BookingID] =
-    EntityIDCodec(_.id.show, BookingID.fromString)
-  implicit val vehicleIDEncoder: EntityIDCodec[VehicleID] =
-    EntityIDCodec(_.id.show, VehicleID.fromString)
+  implicit val idEncoder: EntityIDCodec[BookingID] =
+    EntityIDCodec(_.id.toString, BookingID.fromString)
   implicit val askTimeout: Timeout = Timeout(10.seconds)
 
   Slf4jLogger
     .create[IO]
-    .map { implicit logger: Logger[IO] =&gt;
-      Resource
-        .both(
-          deployEntity[IO, Booking, BookingEvent, BookingID, BookingAlg, BookingRepositoryAlg](
-            BookingEntity(_),
-            BookingRepository(_),
-            (effector, _) =&gt; BookingEffector(effector)
-          ),
-          deployDurableEntity[IO, Vehicle, VehicleID, VehicleAlg, VehicleRepositoryAlg](
-            VehicleEntity(_),
-            VehicleRepository(_),
-            (_, _) =&gt; EffectorT.unit,
-            customizeBehavior = (_, behavior) =&gt; behavior.snapshotAdapter(new VehicleStateAdapter)
-          )
-        )
-        .map { case ((bookingRepository, _), (vehicleRepository, _)) =&gt;
-          httpService(bookingRepository, vehicleRepository)
-        }
-    }
+    .map(implicit logger =&gt; {
+      deployEntity[IO, Booking, BookingEvent, BookingID, BookingAlg, BookingRepositoryAlg](
+        BookingEntity(_),
+        BookingRepository(_),
+        (effector, _) =&gt; BookingEffector(effector)
+      ).map { case (bookingRepository, _) =&gt;
+        httpService(bookingRepository)
+      }
+    })
     .map(
       _.flatMap(service =&gt;
         BlazeServerBuilder[IO]
@@ -310,12 +285,13 @@ endless4s/endless
 }</code></pre>
 <h2><a href="#implementations" name="implementations" class="anchor"><span class="anchor-link"></span></a>Implementations</h2>
 <p>Implementation of the repository algebra is trivial using <code>Repository</code> instance (injected by <code>deployEntity</code>):</p>
-<pre class="prettyprint"><button class="snippet-button copy-snippet" title="Copy snippet to clipboard">copy</button><a class="snippet-button go-to-source" href="https://github.com/endless4s/endless/tree/master/example/src/main/scala/endless/example/logic/BookingRepository.scala#L9-L12" target="_blank" title="Go to snippet source">source</a><code class="language-scala">final case class BookingRepository[F[_]: Monad](repository: Repository[F, BookingID, BookingAlg])
+<pre class="prettyprint"><button class="snippet-button copy-snippet" title="Copy snippet to clipboard">copy</button><a class="snippet-button go-to-source" href="https://github.com/endless4s/endless/tree/master/example/src/main/scala/endless/example/logic/BookingRepository.scala#L9-L13" target="_blank" title="Go to snippet source">source</a><code class="language-scala">final case class BookingRepository[F[_]: Monad](repository: Repository[F, BookingID, BookingAlg])
     extends BookingRepositoryAlg[F] {
-  def bookingFor(bookingID: BookingID): BookingAlg[F] = repository.entityFor(bookingID)
+  import repository._
+  def bookingFor(bookingID: BookingID): BookingAlg[F] = entityFor(bookingID)
 }</code></pre>
 <p>Implementation of entity algebra is done using the <code>Entity</code> typeclass instance (also injected by <code>deployEntity</code>):</p>
-<pre class="prettyprint"><button class="snippet-button copy-snippet" title="Copy snippet to clipboard">copy</button><a class="snippet-button go-to-source" href="https://github.com/endless4s/endless/tree/master/example/src/main/scala/endless/example/logic/BookingEntity.scala#L20-L75" target="_blank" title="Go to snippet source">source</a><code class="language-scala">final case class BookingEntity[F[_]: Logger](entity: Entity[F, Booking, BookingEvent])
+<pre class="prettyprint"><button class="snippet-button copy-snippet" title="Copy snippet to clipboard">copy</button><a class="snippet-button go-to-source" href="https://github.com/endless4s/endless/tree/master/example/src/main/scala/endless/example/logic/BookingEntity.scala#L21-L76" target="_blank" title="Go to snippet source">source</a><code class="language-scala">final case class BookingEntity[F[_]: Monad: Logger](entity: Entity[F, Booking, BookingEvent])
     extends BookingAlg[F] {
   import entity._
 
@@ -471,7 +447,7 @@ endless4s/endless
 }</code></pre>
 <h2><a href="#testing" name="testing" class="anchor"><span class="anchor-link"></span></a>Testing</h2>
 <p>Unit testing for entity algebra implementation, event handling and effector is easy thanks to the parametric nature of <code>F</code>: </p>
-<pre class="prettyprint"><button class="snippet-button copy-snippet" title="Copy snippet to clipboard">copy</button><a class="snippet-button go-to-source" href="https://github.com/endless4s/endless/tree/master/example/src/test/scala/endless/example/logic/BookingEntitySuite.scala#L13-L66" target="_blank" title="Go to snippet source">source</a><code class="language-scala">class BookingEntitySuite
+<pre class="prettyprint"><button class="snippet-button copy-snippet" title="Copy snippet to clipboard">copy</button><a class="snippet-button go-to-source" href="https://github.com/endless4s/endless/tree/master/example/src/test/scala/endless/example/logic/BookingEntitySuite.scala#L14-L67" target="_blank" title="Go to snippet source">source</a><code class="language-scala">class BookingEntitySuite
     extends munit.CatsEffectSuite
     with munit.ScalaCheckEffectSuite
     with Generators {
@@ -525,7 +501,7 @@ endless4s/endless
         }
     }
   }</code></pre>
-<pre class="prettyprint"><button class="snippet-button copy-snippet" title="Copy snippet to clipboard">copy</button><a class="snippet-button go-to-source" href="https://github.com/endless4s/endless/tree/master/example/src/test/scala/endless/example/logic/BookingEventApplierSuite.scala#L8-L105" target="_blank" title="Go to snippet source">source</a><code class="language-scala">class BookingEventApplierSuite extends munit.ScalaCheckSuite with Generators {
+<pre class="prettyprint"><button class="snippet-button copy-snippet" title="Copy snippet to clipboard">copy</button><a class="snippet-button go-to-source" href="https://github.com/endless4s/endless/tree/master/example/src/test/scala/endless/example/logic/BookingEventApplierSuite.scala#L9-L106" target="_blank" title="Go to snippet source">source</a><code class="language-scala">class BookingEventApplierSuite extends munit.ScalaCheckSuite with Generators {
   property(&quot;booking placed when unknown&quot;) {
     forAll { booking: Booking =&gt;
       val fold = new BookingEventApplier()(
@@ -623,7 +599,7 @@ endless4s/endless
     assert(fold.isLeft)
   }
 }</code></pre>
-<pre class="prettyprint"><button class="snippet-button copy-snippet" title="Copy snippet to clipboard">copy</button><a class="snippet-button go-to-source" href="https://github.com/endless4s/endless/tree/master/example/src/test/scala/endless/example/logic/BookingEffectorSuite.scala#L19-L110" target="_blank" title="Go to snippet source">source</a><code class="language-scala">class BookingEffectorSuite
+<pre class="prettyprint"><button class="snippet-button copy-snippet" title="Copy snippet to clipboard">copy</button><a class="snippet-button go-to-source" href="https://github.com/endless4s/endless/tree/master/example/src/test/scala/endless/example/logic/BookingEffectorSuite.scala#L19-L112" target="_blank" title="Go to snippet source">source</a><code class="language-scala">class BookingEffectorSuite
     extends munit.CatsEffectSuite
     with munit.ScalaCheckEffectSuite
     with Generators {
@@ -685,25 +661,27 @@ endless4s/endless
         bookingID: Booking.BookingID,
         time: Instant,
         passengerCount: Int,
-        origin: LatLon,
-        destination: LatLon
+        origin: Booking.LatLon,
+        destination: Booking.LatLon
     ): IO[BookingAlg.BookingAlreadyExists \/ Unit] =
       IO.raiseError(new RuntimeException(&quot;should not be called&quot;))
 
     override def get: IO[BookingAlg.BookingUnknown.type \/ Booking] =
       IO.raiseError(new RuntimeException(&quot;should not be called&quot;))
 
-    override def changeOrigin(newOrigin: LatLon): IO[BookingAlg.BookingUnknown.type \/ Unit] =
+    override def changeOrigin(
+        newOrigin: Booking.LatLon
+    ): IO[BookingAlg.BookingUnknown.type \/ Unit] =
       IO.raiseError(new RuntimeException(&quot;should not be called&quot;))
 
     override def changeDestination(
-        newDestination: LatLon
+        newDestination: Booking.LatLon
     ): IO[BookingAlg.BookingUnknown.type \/ Unit] =
       IO.raiseError(new RuntimeException(&quot;should not be called&quot;))
 
     override def changeOriginAndDestination(
-        newOrigin: LatLon,
-        newDestination: LatLon
+        newOrigin: Booking.LatLon,
+        newDestination: Booking.LatLon
     ): IO[BookingAlg.BookingUnknown.type \/ Unit] =
       IO.raiseError(new RuntimeException(&quot;should not be called&quot;))
 
@@ -735,8 +713,8 @@ endless4s/endless
               bookingID: Booking.BookingID,
               time: Instant,
               passengerCount: Int,
-              origin: LatLon,
-              destination: LatLon
+              origin: Booking.LatLon,
+              destination: Booking.LatLon
           ): Id[BookingAlg.BookingAlreadyExists \/ Unit] = reply
         })
         .map(incomingCommand.replyEncoder.encode(_))
@@ -752,7 +730,7 @@ Edit this page
 </div>
 <div class="print-only">
 <span class="md-source-file md-version">
-0.0.0+1-cbe25d63*
+0.0.0+1-887929f6*
 </span>
 </div>
 </article>
