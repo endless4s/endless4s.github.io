@@ -175,7 +175,7 @@ endless4s/endless
 <ul style="display: none">
 <li class="md-nav__item md-version" id="project.version">
 <label class="md-nav__link" for="__version">
-<i class="md-icon" title="Version">label_outline</i> 0.20.0
+<i class="md-icon" title="Version">label_outline</i> 0.20.1
 </label>
 </li>
 </ul>
@@ -207,7 +207,7 @@ endless4s/endless
 <h2><a href="#deployentity" name="deployentity" class="anchor"><span class="anchor-link"></span></a><code>deployEntity</code></h2>
 <p>This function brings everything together and delivers a cats effect <a href="https://typelevel.org/cats-effect/docs/std/resource" title="Resource" target="_blank" rel="noopener noreferrer">Resource</a> with the repository instance in context <code>F</code> bundled with the ref to the shard region actor returned by the call to Akka&rsquo;s <a href="https://doc.akka.io/docs/akka/current/typed/cluster-sharding.html#basic-example" title="ClusterSharding.init" target="_blank" rel="noopener noreferrer">ClusterSharding.init</a>.</p>
 <p>The following snippet is the scaffolding for the library&rsquo;s sample application, a simple API to manage bookings:</p>
-<pre class="prettyprint"><button class="snippet-button copy-snippet" title="Copy snippet to clipboard">copy</button><a class="snippet-button go-to-source" href="https://github.com/endless4s/endless/tree/v0.20.0/example/src/main/scala/endless/example/ExampleApp.scala#L47-L89" target="_blank" title="Go to snippet source">source</a><code class="language-scala">def apply(implicit actorSystem: ActorSystem[Nothing]): IO[Resource[IO, Server]] = {
+<pre class="prettyprint"><button class="snippet-button copy-snippet" title="Copy snippet to clipboard">copy</button><a class="snippet-button go-to-source" href="https://github.com/endless4s/endless/tree/v0.20.1/example/src/main/scala/endless/example/ExampleApp.scala#L47-L89" target="_blank" title="Go to snippet source">source</a><code class="language-scala">def apply(implicit actorSystem: ActorSystem[Nothing]): IO[Resource[IO, Server]] = {
   implicit val clusterSharding: ClusterSharding = ClusterSharding(actorSystem)
   implicit val bookingCommandProtocol: BookingCommandProtocol = new BookingCommandProtocol
   implicit val vehicleCommandProtocol: VehicleCommandProtocol = new VehicleCommandProtocol
@@ -258,9 +258,9 @@ endless4s/endless
 <p>The equivalent method for durable entities is <a href="api/runtime/endless/runtime/akka/DurableDeployer.html" title="endless.runtime.akka.DurableDeployer"><code>deployDurableEntity</code></a>.</p></div>
 <h2><a href="#internals" name="internals" class="anchor"><span class="anchor-link"></span></a>Internals</h2>
 <h3><a href="#protocol" name="protocol" class="anchor"><span class="anchor-link"></span></a>Protocol</h3>
-<p>Thanks to the <a href="protocol.html">CommandProtocol</a> instance, entity algebra calls can be &ldquo;materialized&rdquo; into concrete commands and replies which are carried in an internal protobuf binary format <a href="https://github.com/endless4s/endless/tree/v0.20.0/runtime/src/main/protobuf/command.proto">command.proto</a>. <a href="/runtime/src/main/scala/endless/runtime/akka/ShardingCommandRouter.scala">ShardingCommandRouter</a> takes care of delivering the commands to the right entity and returning the reply simply by using Akka&rsquo;s <code>ask</code>.</p>
+<p>Thanks to the <a href="protocol.html">CommandProtocol</a> instance, entity algebra calls can be &ldquo;materialized&rdquo; into concrete commands and replies which are carried in an internal protobuf binary format <a href="https://github.com/endless4s/endless/tree/v0.20.1/runtime/src/main/protobuf/command.proto">command.proto</a>. <a href="/runtime/src/main/scala/endless/runtime/akka/ShardingCommandRouter.scala">ShardingCommandRouter</a> takes care of delivering the commands to the right entity and returning the reply simply by using Akka&rsquo;s <code>ask</code>.</p>
 <h3><a href="#deployer" name="deployer" class="anchor"><span class="anchor-link"></span></a>Deployer</h3>
-<p>Internally, <a href="https://github.com/endless4s/endless/tree/v0.20.0/runtime/src/main/scala/endless/runtime/akka/Deployer.scala">deployEntity</a> uses Akka <a href="https://doc.akka.io/docs/akka/current/typed/persistence.html#example-and-core-api" title="EventSourcedBehavior" target="_blank" rel="noopener noreferrer">EventSourcedBehavior</a> DSL to configure the entity in the following way (for <a href="https://github.com/endless4s/endless/tree/v0.20.0/runtime/src/main/scala/endless/runtime/akka/DurableDeployer.scala">deployDurableEntity</a>, this is <a href="https://doc.akka.io/docs/akka/current/typed/durable-state/persistence.html#example-and-core-api">DurableStateBehavior</a>):</p>
+<p>Internally, <a href="https://github.com/endless4s/endless/tree/v0.20.1/runtime/src/main/scala/endless/runtime/akka/Deployer.scala">deployEntity</a> uses Akka <a href="https://doc.akka.io/docs/akka/current/typed/persistence.html#example-and-core-api" title="EventSourcedBehavior" target="_blank" rel="noopener noreferrer">EventSourcedBehavior</a> DSL to configure the entity in the following way (for <a href="https://github.com/endless4s/endless/tree/v0.20.1/runtime/src/main/scala/endless/runtime/akka/DurableDeployer.scala">deployDurableEntity</a>, this is <a href="https://doc.akka.io/docs/akka/current/typed/durable-state/persistence.html#example-and-core-api">DurableStateBehavior</a>):</p>
 <h4><a href="#command-handler" name="command-handler" class="anchor"><span class="anchor-link"></span></a>Command handler</h4>
 <ol>
   <li>use <a href="protocol.html">CommandProtocol.server</a> to decode the command and invoke the corresponding algebra logic, interpreted internally with <a href="api/core/endless/core/interpret/EntityT.html" title="endless.core.interpret.EntityT"><code>EntityT</code></a>. Interpretation of the monadic chain occurs, leading to one or more events and a return value.</li>
@@ -276,13 +276,13 @@ endless4s/endless
 <p>Since Akka <a href="https://doc.akka.io/docs/akka/current/common/binary-compatibility-rules.html#mixed-versioning-is-not-allowed">does not allow mixed versions</a> in a project, Akka dependencies of <code>endless-runtime-akka</code> are marked a <code>Provided</code>. This means that your application <code>libraryDependencies</code> needs to directly include Akka as a dependency. The minimal supported Akka version is 2.6.17. </p></div>
 </div>
 <div>
-<a href="https://github.com/endless4s/endless/tree/v0.20.0/documentation/src/main/paradox/runtime.md" title="Edit this page" class="md-source-file md-edit">
+<a href="https://github.com/endless4s/endless/tree/v0.20.1/documentation/src/main/paradox/runtime.md" title="Edit this page" class="md-source-file md-edit">
 Edit this page
 </a>
 </div>
 <div class="print-only">
 <span class="md-source-file md-version">
-0.20.0
+0.20.1
 </span>
 </div>
 </article>
