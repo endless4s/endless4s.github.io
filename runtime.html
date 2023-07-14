@@ -23,7 +23,7 @@
 
 <meta name="description" content="Scala library to describe event sourced entities using tagless-final algebras, running with built-in implementations for Akka.">
 <link rel="shortcut icon" href="favicon.png">
-<title>Akka runtime · </title>
+<title>Akka and Pekko runtimes · </title>
 <link rel="stylesheet" href="assets/stylesheets/application.451f80e5.css">
 <link rel="stylesheet" href="assets/stylesheets/application-palette.22915126.css">
 <meta name="theme-color" content="#546e7a" />
@@ -62,7 +62,7 @@ data-md-color-accent="red"
 <span class="md-header-nav__topic">
 </span>
 <span class="md-header-nav__topic">
-Akka runtime
+Akka and Pekko runtimes
 </span>
 </div>
 </div>
@@ -154,7 +154,7 @@ endless4s/endless
     <li><a href="name.html" class="page">EntityNameProvider</a></li>
     <li><a href="id.html" class="page">EntityIDCodec</a></li>
   </ul></li>
-  <li><a href="runtime.html" class="active page">Akka runtime</a></li>
+  <li><a href="runtime.html" class="active page">Akka and Pekko runtimes</a></li>
   <li><a href="example.html" class="page">Example app</a></li>
   <li><a href="reference.html" class="page">Reference</a></li>
   <li><a href="inspiration.html" class="page">Inspiration</a></li>
@@ -163,7 +163,7 @@ endless4s/endless
 <nav class="md-nav md-nav--secondary">
 <label class="md-nav__title" for="__toc">Table of contents</label>
 <ul>
-  <li><a href="runtime.html#akka-runtime" class="header">Akka runtime</a>
+  <li><a href="runtime.html#akka-and-pekko-runtimes" class="header">Akka and Pekko runtimes</a>
   <ul>
     <li><a href="runtime.html#deployentity" class="header"><code>deployEntity</code></a></li>
     <li><a href="runtime.html#internals" class="header">Internals</a></li>
@@ -175,7 +175,7 @@ endless4s/endless
 <ul style="display: none">
 <li class="md-nav__item md-version" id="project.version">
 <label class="md-nav__link" for="__version">
-<i class="md-icon" title="Version">label_outline</i> 0.23.0
+<i class="md-icon" title="Version">label_outline</i> 0.24.0
 </label>
 </li>
 </ul>
@@ -188,7 +188,7 @@ endless4s/endless
 <nav class="md-nav md-nav--secondary">
 <label class="md-nav__title" for="__toc">Table of contents</label>
 <ul>
-  <li><a href="runtime.html#akka-runtime" class="header">Akka runtime</a>
+  <li><a href="runtime.html#akka-and-pekko-runtimes" class="header">Akka and Pekko runtimes</a>
   <ul>
     <li><a href="runtime.html#deployentity" class="header"><code>deployEntity</code></a></li>
     <li><a href="runtime.html#internals" class="header">Internals</a></li>
@@ -202,62 +202,62 @@ endless4s/endless
 <div class="md-content">
 <article class="md-content__inner md-typeset">
 <div class="md-content__searchable">
-<h1><a href="#akka-runtime" name="akka-runtime" class="anchor"><span class="anchor-link"></span></a>Akka runtime</h1>
-<p>Once required interpreters and typeclass instances have been defined, deploying an entity with Akka boils down to a single call to <a href="api/runtime/endless/runtime/akka/deploy/Deployer.html" title="endless.runtime.akka.deploy.Deployer"><code>deployEntity</code></a>. This requires an actor system and the cluster sharding extension in implicit scope, bundled in the type <a href="api/runtime/endless/runtime/akka/deploy/AkkaCluster.html" title="endless.runtime.akka.deploy.AkkaCluster"><code>AkkaCluster</code></a>. The recommended pattern is to use the built-in <a href="api/runtime/endless/runtime/akka/deploy/AkkaCluster$$managedResource.html" title="endless.runtime.akka.deploy.AkkaCluster.managedResource"><code>managedResource</code></a> helper method to obtain an instance of this class, which wraps actor system creation and shutdown with a cats effect <a href="https://typelevel.org/cats-effect/docs/std/resource" title="Resource" target="_blank" rel="noopener noreferrer">Resource</a>. </p>
+<h1><a href="#akka-and-pekko-runtimes" name="akka-and-pekko-runtimes" class="anchor"><span class="anchor-link"></span></a>Akka and Pekko runtimes</h1>
+<p>Once required interpreters and typeclass instances have been defined, deploying an entity with Akka or Pekko boils down to a single call to <a href="api/runtime/endless/runtime/akka/deploy/Deployer.html" title="endless.runtime.akka.deploy.Deployer"><code>deployEntity</code></a>. This requires an actor system and the cluster sharding extension in implicit scope, bundled in the type <a href="api/runtime/endless/runtime/akka/deploy/AkkaCluster.html" title="endless.runtime.akka.deploy.AkkaCluster"><code>AkkaCluster</code></a>. The recommended pattern is to use the built-in <a href="api/runtime/endless/runtime/akka/deploy/AkkaCluster$$managedResource.html" title="endless.runtime.akka.deploy.AkkaCluster.managedResource"><code>managedResource</code></a> helper method to obtain an instance of this class, which wraps actor system creation and shutdown with a cats effect <a href="https://typelevel.org/cats-effect/docs/std/resource" title="Resource" target="_blank" rel="noopener noreferrer">Resource</a>. </p>
 <h2><a href="#deployentity" name="deployentity" class="anchor"><span class="anchor-link"></span></a><code>deployEntity</code></h2>
 <p>This function brings everything together and delivers a cats effect <a href="https://typelevel.org/cats-effect/docs/std/resource" title="Resource" target="_blank" rel="noopener noreferrer">Resource</a> with the repository instance in context <code>F</code> bundled with the ref to the shard region actor returned by the call to Akka&rsquo;s <a href="https://doc.akka.io/docs/akka/current/typed/cluster-sharding.html#basic-example" title="ClusterSharding.init" target="_blank" rel="noopener noreferrer">ClusterSharding.init</a>.</p>
-<p>The following snippet is the scaffolding for the library&rsquo;s sample application, a simple API to manage bookings:</p>
-<pre class="prettyprint"><button class="snippet-button copy-snippet" title="Copy snippet to clipboard">copy</button><a class="snippet-button go-to-source" href="https://github.com/endless4s/endless/tree/v0.23.0/example/src/main/scala/endless/example/ExampleApp.scala#L45-L95" target="_blank" title="Go to snippet source">source</a><code class="language-scala">def apply(createActorSystem: =&gt; ActorSystem[Nothing]): Resource[IO, Server] = {
-  implicit val bookingCommandProtocol: BookingCommandProtocol = new BookingCommandProtocol
-  implicit val vehicleCommandProtocol: VehicleCommandProtocol = new VehicleCommandProtocol
-  implicit val eventApplier: BookingEventApplier = new BookingEventApplier
-  implicit val bookingEntityNameProvider: EntityNameProvider[BookingID] = () =&gt; &quot;booking&quot;
-  implicit val vehicleEntityNameProvider: EntityNameProvider[VehicleID] = () =&gt; &quot;vehicle&quot;
-  implicit val bookingIDEncoder: EntityIDCodec[BookingID] =
-    EntityIDCodec(_.id.show, BookingID.fromString)
-  implicit val vehicleIDEncoder: EntityIDCodec[VehicleID] =
-    EntityIDCodec(_.id.show, VehicleID.fromString)
-  implicit val askTimeout: Timeout = Timeout(10.seconds)
-
-  Resource
-    .eval(Slf4jLogger.create[IO])
-    .flatMap { implicit logger: Logger[IO] =&gt;
-      AkkaCluster.managedResource[IO](createActorSystem).flatMap {
-        implicit cluster: AkkaCluster[IO] =&gt;
-          Resource
-            .both(
-              deployEntity[
-                IO,
-                Booking,
-                BookingEvent,
-                BookingID,
-                BookingAlg,
-                BookingRepositoryAlg
-              ](
-                BookingEntity(_),
-                BookingRepository(_),
-                { case (effector, _, _) =&gt; BookingEffector(effector) }
-              ),
-              deployDurableEntityF[IO, Vehicle, VehicleID, VehicleAlg, VehicleRepositoryAlg](
-                VehicleEntity(_).pure[IO],
-                VehicleRepository(_).pure[IO],
-                { case (effector, _, _) =&gt; VehicleEffector.apply[IO](effector).map(_.apply) },
-                customizeBehavior =
-                  (_, behavior) =&gt; behavior.snapshotAdapter(new VehicleStateAdapter)
-              )
+<p>The following snippet is the scaffolding for the library&rsquo;s sample application (in its Pekko form), a simple API to manage vehicles and bookings:</p>
+<pre class="prettyprint"><button class="snippet-button copy-snippet" title="Copy snippet to clipboard">copy</button><a class="snippet-button go-to-source" href="https://github.com/endless4s/endless/tree/v0.24.0/example/src/main/scala/endless/example/app/pekko/PekkoApp.scala#L63-L113" target="_blank" title="Go to snippet source">source</a><code class="language-scala">Resource
+  .eval(Slf4jLogger.create[IO])
+  .flatMap { implicit logger: Logger[IO] =&gt;
+    PekkoCluster.managedResource[IO](actorSystem).flatMap {
+      implicit cluster: PekkoCluster[IO] =&gt;
+        Resource
+          .both(
+            deployEntity[
+              IO,
+              Booking,
+              BookingEvent,
+              BookingID,
+              BookingAlg,
+              BookingRepositoryAlg
+            ](
+              BookingEntity(_),
+              BookingRepository(_),
+              { case (effector, _, _) =&gt; BookingEffector(effector) },
+              customizeBehavior = (_, behavior) =&gt;
+                behavior.eventAdapter(
+                  new EventAdapter[
+                    BookingEvent,
+                    endless.example.proto.booking.events.BookingEvent
+                  ] {
+                    def toJournal(e: BookingEvent)
+                        : endless.example.proto.booking.events.BookingEvent =
+                      eventAdapter.toJournal(e)
+                    def manifest(event: BookingEvent): String = event.getClass.getName
+                    def fromJournal(
+                        p: endless.example.proto.booking.events.BookingEvent,
+                        manifest: String
+                    ): EventSeq[BookingEvent] = EventSeq.single(eventAdapter.fromJournal(p))
+                  }
+                )
+            ),
+            deployDurableEntityF[IO, Vehicle, VehicleID, VehicleAlg, VehicleRepositoryAlg](
+              VehicleEntity(_).pure[IO],
+              VehicleRepository(_).pure[IO],
+              { case (effector, _, _) =&gt; VehicleEffector.apply[IO](effector).map(_.apply) },
+              customizeBehavior = (_, behavior) =&gt;
+                behavior.snapshotAdapter(new SnapshotAdapter[Option[Vehicle]] {
+                  def toJournal(state: Option[Vehicle]): Any = stateAdapter.toJournal(state)
+                  def fromJournal(from: Any): Option[Vehicle] = stateAdapter.fromJournal(from)
+                })
             )
-            .map { case ((bookingRepository, _), (vehicleRepository, _)) =&gt;
-              httpService(bookingRepository, vehicleRepository, cluster)
-            }
-            .flatMap(service =&gt;
-              BlazeServerBuilder[IO]
-                .bindHttp(8080, &quot;localhost&quot;)
-                .withHttpApp(service)
-                .resource
-            )
-      }
+          )
+          .flatMap { case ((bookingRepository, _), (vehicleRepository, _)) =&gt;
+            HttpServer(port, bookingRepository, vehicleRepository, cluster.isMemberUp)
+          }
     }
-}</code></pre>
+  }</code></pre>
 <p><code>deployEntity</code> is parameterized with the context <code>F</code> and the various involved types: <code>S</code> for entity state, <code>E</code> for events, <code>ID</code> for entity ID and <code>Alg</code> &amp; <code>RepositoryAlg</code> for entity and repository algebras respectively (both higher-kinded type constructors).</p>
 <p>Entity algebra <code>Alg</code> must also be equipped with an instance of <code>FunctorK</code> to support natural transformations and <a href="router.html">CommandRouter</a>. </p>
 <p>In order to bridge Akka&rsquo;s implicit asynchronicity with the side-effect free context <code>F</code> used for algebras, it requires <a href="https://typelevel.org/cats-effect/docs/typeclasses/async" title="Async" target="_blank" rel="noopener noreferrer">Async</a> from <code>F</code>. This makes it possible to use the <a href="https://typelevel.org/cats-effect/docs/std/dispatcher" title="Dispatcher" target="_blank" rel="noopener noreferrer">Dispatcher</a> mechanism for running the command handling monadic chain synchronously from within the actor thread.</p>
@@ -266,9 +266,9 @@ endless4s/endless
 <p>The equivalent method for durable entities is <a href="api/runtime/endless/runtime/akka/deploy/DurableDeployer.html" title="endless.runtime.akka.deploy.DurableDeployer"><code>deployDurableEntity</code></a>.</p></div>
 <h2><a href="#internals" name="internals" class="anchor"><span class="anchor-link"></span></a>Internals</h2>
 <h3><a href="#protocol" name="protocol" class="anchor"><span class="anchor-link"></span></a>Protocol</h3>
-<p>Thanks to the <a href="protocol.html">CommandProtocol</a> instance, entity algebra calls can be &ldquo;materialized&rdquo; into concrete commands and replies which are carried in an internal protobuf binary format <a href="https://github.com/endless4s/endless/tree/v0.23.0/runtime/src/main/protobuf/command.proto">command.proto</a>. <a href="/runtime/src/main/scala/endless/runtime/akka/ShardingCommandRouter.scala">ShardingCommandRouter</a> takes care of delivering the commands to the right entity and returning the reply simply by using Akka&rsquo;s <code>ask</code>.</p>
+<p>Thanks to the <a href="protocol.html">CommandProtocol</a> instance, entity algebra calls can be &ldquo;materialized&rdquo; into concrete commands and replies which are carried in an internal protobuf binary format <a href="https://github.com/endless4s/endless/tree/v0.24.0/runtime/src/main/protobuf/command.proto">command.proto</a>. <a href="/runtime/src/main/scala/endless/runtime/akka/ShardingCommandRouter.scala">ShardingCommandRouter</a> takes care of delivering the commands to the right entity and returning the reply simply by using Akka&rsquo;s <code>ask</code>.</p>
 <h3><a href="#deployer" name="deployer" class="anchor"><span class="anchor-link"></span></a>Deployer</h3>
-<p>Internally, <a href="https://github.com/endless4s/endless/tree/v0.23.0/runtime/src/main/scala/endless/runtime/akka/Deployer.scala">deployEntity</a> uses Akka <a href="https://doc.akka.io/docs/akka/current/typed/persistence.html#example-and-core-api" title="EventSourcedBehavior" target="_blank" rel="noopener noreferrer">EventSourcedBehavior</a> DSL to configure the entity in the following way (for <a href="https://github.com/endless4s/endless/tree/v0.23.0/runtime/src/main/scala/endless/runtime/akka/DurableDeployer.scala">deployDurableEntity</a>, this is <a href="https://doc.akka.io/docs/akka/current/typed/durable-state/persistence.html#example-and-core-api">DurableStateBehavior</a>):</p>
+<p>Internally, <a href="https://github.com/endless4s/endless/tree/v0.24.0/runtime/src/main/scala/endless/runtime/akka/Deployer.scala">deployEntity</a> uses Akka <a href="https://doc.akka.io/docs/akka/current/typed/persistence.html#example-and-core-api" title="EventSourcedBehavior" target="_blank" rel="noopener noreferrer">EventSourcedBehavior</a> DSL to configure the entity in the following way (for <a href="https://github.com/endless4s/endless/tree/v0.24.0/runtime/src/main/scala/endless/runtime/akka/DurableDeployer.scala">deployDurableEntity</a>, this is <a href="https://doc.akka.io/docs/akka/current/typed/durable-state/persistence.html#example-and-core-api">DurableStateBehavior</a>):</p>
 <h4><a href="#command-handler" name="command-handler" class="anchor"><span class="anchor-link"></span></a>Command handler</h4>
 <ol>
   <li>use <a href="protocol.html">CommandProtocol.server</a> to decode the command and invoke the corresponding algebra logic, interpreted internally with <a href="api/core/endless/core/interpret/EntityT.html" title="endless.core.interpret.EntityT"><code>EntityT</code></a>. Interpretation of the monadic chain occurs, leading to one or more events and a return value.</li>
@@ -284,13 +284,13 @@ endless4s/endless
 <p>Since Akka <a href="https://doc.akka.io/docs/akka/current/common/binary-compatibility-rules.html#mixed-versioning-is-not-allowed">does not allow mixed versions</a> in a project, Akka dependencies of <code>endless-runtime-akka</code> are marked a <code>Provided</code>. This means that your application <code>libraryDependencies</code> needs to directly include Akka as a dependency. The minimal supported Akka version is 2.6.17. </p></div>
 </div>
 <div>
-<a href="https://github.com/endless4s/endless/tree/v0.23.0/documentation/src/main/paradox/runtime.md" title="Edit this page" class="md-source-file md-edit">
+<a href="https://github.com/endless4s/endless/tree/v0.24.0/documentation/src/main/paradox/runtime.md" title="Edit this page" class="md-source-file md-edit">
 Edit this page
 </a>
 </div>
 <div class="print-only">
 <span class="md-source-file md-version">
-0.23.0
+0.24.0
 </span>
 </div>
 </article>
