@@ -144,18 +144,19 @@ endless4s/endless
   <li><a href="nutshell.html" class="page">In a nutshell</a></li>
   <li><a href="abstractions.html" class="page">Abstractions</a>
   <ul>
-    <li><a href="repository.html" class="page">Repository</a></li>
+    <li><a href="sharding.html" class="page">Sharding</a></li>
     <li><a href="entity.html" class="page">Entity</a></li>
     <li><a href="durable-entity.html" class="page">Durable entity</a></li>
     <li><a href="applier.html" class="page">EventApplier</a></li>
     <li><a href="protocol.html" class="page">CommandProtocol</a></li>
-    <li><a href="router.html" class="page">CommandRouter</a></li>
+    <li><a href="sender.html" class="page">CommandSender</a></li>
+    <li><a href="side-effect.html" class="page">Side-effect</a></li>
     <li><a href="effector.html" class="page">Effector</a></li>
     <li><a href="name.html" class="page">EntityNameProvider</a></li>
     <li><a href="id.html" class="page">EntityIDCodec</a></li>
     <li><a href="deployer.html" class="page">Deployer</a></li>
   </ul></li>
-  <li><a href="runtime.html" class="page">Akka and Pekko runtimes</a></li>
+  <li><a href="runtime.html" class="page">Pekko and Akka runtimes</a></li>
   <li><a href="example.html" class="page">Example app</a></li>
   <li><a href="reference.html" class="page">Reference</a></li>
   <li><a href="inspiration.html" class="active page">Inspiration</a></li>
@@ -177,7 +178,7 @@ endless4s/endless
 <ul style="display: none">
 <li class="md-nav__item md-version" id="project.version">
 <label class="md-nav__link" for="__version">
-<i class="md-icon" title="Version">label_outline</i> 0.26.0
+<i class="md-icon" title="Version">label_outline</i> 0.27.0
 </label>
 </li>
 </ul>
@@ -206,23 +207,23 @@ endless4s/endless
 <article class="md-content__inner md-typeset">
 <div class="md-content__searchable">
 <h1><a href="#inspiration" name="inspiration" class="anchor"><span class="anchor-link"></span></a>Inspiration</h1>
-<p>Our journey towards elevation of our event-sourcing code abstraction level started with an inheritance-based model, that we described in <a href="https://medium.com/bestmile/domain-driven-event-sourcing-with-akka-typed-5f5b8bbfb823">this article</a>. We introduced <code>EntityCommand</code> and <code>EntityEvent</code> traits, which allowed us in turn to define some<code>CommandProcessor</code> and <code>EventApplier</code> constructs with generic implementations and mappings for Akka. This was already a good step in the right direction as it allowed us to host command handling and event handling logic in the domain, free from any Akka dependencies. </p>
+<p>Our journey towards elevation of our event-sourcing code abstraction level started with an inheritance-based model, that we described in <a href="https://medium.com/bestmile/domain-driven-event-sourcing-with-akka-typed-5f5b8bbfb823">this article</a>. We introduced <code>EntityCommand</code> and <code>EntityEvent</code> traits, which allowed us in turn to define some<code>CommandProcessor</code> and <code>EventApplier</code> constructs with generic implementations and mappings for Akka. This was already a good step in the right direction as it allowed us to host command handling and event handling logic in the domain, free from any Pekko/Akka dependencies. </p>
 <h2><a href="#implicit-commands-replies" name="implicit-commands-replies" class="anchor"><span class="anchor-link"></span></a>Implicit commands &amp; replies</h2>
 <p>However, with this approach, commands and replies are still an integral part of the domain model. And if you think about it, such models and associated mappings to/from values do not add any value to domain expression, rather the contrary. Domain code is more compact if we can use straight algebras and values, without concern for the underlying necessary reification to cross node boundaries in the cluster. It was also always an open question for us how to best integrate event sourcing within functional codebases. Since event-sourcing looks a lot like a reader-writer monad, we felt there was some potential there. </p>
 <h2><a href="#aecor" name="aecor" class="anchor"><span class="anchor-link"></span></a>Aecor</h2>
-<p>At this point, we ran into the outstanding work done by Denis Mikhaylov &amp; contributors on <a href="https://github.com/notxcain/aecor">Aecor</a> as well as the excellent <a href="https://pavkin.ru/aecor-intro/">blog series</a> by Vladimir Pavkin. This was a real eye-opener, and we highly recommend the read!</p>
-<p>However, we could not use the library directly for a number of reasons, chiefly because we are attached to keeping the layer above Akka as lightweight as possible and we want to keep control on serialization aspects. There also are other more subtle differences: for instance we consider command rejections (and more generally, &ldquo;business errors&rdquo;) as first-order values, therefore opting for <code>Either</code> for replies. In <em>endless</em>, we&rsquo;ve also tried to stick to close to DDD &amp; Akka nomenclature as much as possible. </p>
+<p>At this point, we ran into the outstanding work done by Denis Mikhaylov &amp; contributors on <a href="https://github.com/notxcain/aecor">Aecor</a> as well as the excellent <a href="https://pavkin.ru/aecor-intro/">blog series</a> by Vladimir Pavkin. This was an eye-opener, and we highly recommend the read!</p>
+<p>However, we could not use the library directly for a number of reasons, chiefly because we are attached to keeping the layer above Pekko/Akka as lightweight as possible and we want to keep control on serialization aspects. There also are other more subtle differences: for instance we consider command rejections (and more generally, &ldquo;business errors&rdquo;) as first-order values, therefore opting for <code>Either</code> for replies. In <em>endless</em>, we&rsquo;ve also tried to stick close to DDD &amp; Pekko/Akka nomenclature as much as possible. </p>
 <h2><a href="#bridging-the-gap" name="bridging-the-gap" class="anchor"><span class="anchor-link"></span></a>Bridging the gap</h2>
-<p>By providing of typeclasses allowing for expressive description of entity behavior and embedding common event sourcing patterns into these abstractions, we hope to make it more approachable to enjoy side-effect free programming while still benefiting from the great power of Akka. </p>
+<p>By providing of typeclasses allowing for expressive description of entity behavior and embedding common event sourcing patterns into these abstractions, we hope to make it more approachable to enjoy side-effect free programming while still benefiting from the great power of Pekko/Akka. </p>
 </div>
 <div>
-<a href="https://github.com/endless4s/endless/tree/v0.26.0/documentation/src/main/paradox/inspiration.md" title="Edit this page" class="md-source-file md-edit">
+<a href="https://github.com/endless4s/endless/tree/v0.27.0/documentation/src/main/paradox/inspiration.md" title="Edit this page" class="md-source-file md-edit">
 Edit this page
 </a>
 </div>
 <div class="print-only">
 <span class="md-source-file md-version">
-0.26.0
+0.27.0
 </span>
 </div>
 </article>

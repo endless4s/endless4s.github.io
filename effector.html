@@ -144,18 +144,19 @@ endless4s/endless
   <li><a href="nutshell.html" class="page">In a nutshell</a></li>
   <li><a href="abstractions.html" class="page">Abstractions</a>
   <ul>
-    <li><a href="repository.html" class="page">Repository</a></li>
+    <li><a href="sharding.html" class="page">Sharding</a></li>
     <li><a href="entity.html" class="page">Entity</a></li>
     <li><a href="durable-entity.html" class="page">Durable entity</a></li>
     <li><a href="applier.html" class="page">EventApplier</a></li>
     <li><a href="protocol.html" class="page">CommandProtocol</a></li>
-    <li><a href="router.html" class="page">CommandRouter</a></li>
+    <li><a href="sender.html" class="page">CommandSender</a></li>
+    <li><a href="side-effect.html" class="page">Side-effect</a></li>
     <li><a href="effector.html" class="active page">Effector</a></li>
     <li><a href="name.html" class="page">EntityNameProvider</a></li>
     <li><a href="id.html" class="page">EntityIDCodec</a></li>
     <li><a href="deployer.html" class="page">Deployer</a></li>
   </ul></li>
-  <li><a href="runtime.html" class="page">Akka and Pekko runtimes</a></li>
+  <li><a href="runtime.html" class="page">Pekko and Akka runtimes</a></li>
   <li><a href="example.html" class="page">Example app</a></li>
   <li><a href="reference.html" class="page">Reference</a></li>
   <li><a href="inspiration.html" class="page">Inspiration</a></li>
@@ -177,7 +178,7 @@ endless4s/endless
 <ul style="display: none">
 <li class="md-nav__item md-version" id="project.version">
 <label class="md-nav__link" for="__version">
-<i class="md-icon" title="Version">label_outline</i> 0.26.0
+<i class="md-icon" title="Version">label_outline</i> 0.27.0
 </label>
 </li>
 </ul>
@@ -214,50 +215,48 @@ trait Passivator[F[_]] {
   def disablePassivation: F[Unit]
 }
 trait Self[F[_], Alg[_[_]]] {
-  def self: F[Alg[F]]
+  def self: Alg[F]
 }
 trait Effector[F[_], S] extends StateReader[F, S] with Passivator[F] with Self[F]
 </code></pre>
 <p><a href="api/core/endless/core/entity/Effector.html" title="endless.core.entity.Effector"><code>Effector</code></a> is a typeclass used to describe side effects occurring <strong>after</strong> event persistence and entity recovery. </p>
-<p>Side-effects are typically asynchronous operations such as kafka writes, outgoing REST requests, and <a href="https://doc.akka.io/docs/akka/current/typed/cluster-sharding.html#passivation">entity passivation</a> (flushing out of memory). <code>Effector</code> is used in a <code>Effector =&gt; F[Unit]</code> function provided upon entity deployment (e.g. <a href="https://github.com/endless4s/endless/tree/v0.26.0/example/src/main/scala/endless/example/logic/BookingEffector.scala">BookingEffector</a>). In the provided Akka runtime, the resulting <code>F[Unit]</code> is executed in <em>run &amp; forget</em> mode so that command reply is not delayed by any lengthy side-effect (<code>Self</code> can be used to notify success or failure of asynchronous operations back to the entity).</p><div class="callout warning "><div class="callout-title">Warning</div>
-<p>In the provided Akka runtime, read-only commands (commands that do not generate events) do not trigger side-effects, which corresponds to sound practice. </p></div><div class="callout note "><div class="callout-title">Note</div>
-<p>Defining an effector is entirely optional with the Akka runtime, pass-in <code>(_, _) =&gt; EffectorT.unit</code> in <a href="api/runtime/endless/runtime/akka/deploy/Deployer.html" title="endless.runtime.akka.deploy.Deployer"><code>deployEntity</code></a> to disable effector.</p></div><div class="callout note "><div class="callout-title">Note</div>
-<p><code>EffectorT</code> (the monad transformer used to interpret the effector algebra) supports cats-effect kernel typeclasses all to way down to <code>Async</code>, which makes it possible to take advantage of semantics such as timeouts, concurrency, etc.</p></div>
+<p>Side-effects are typically asynchronous operations such as kafka writes, outgoing REST requests, and <a href="https://doc.akka.io/docs/akka/current/typed/cluster-sharding.html#passivation">entity passivation</a> (flushing out of memory). <code>Effector</code> is used in a <code>Effector =&gt; F[Unit]</code> function provided upon entity deployment (e.g. <a href="https://github.com/endless4s/endless/tree/v0.27.0/example/src/main/scala/endless/example/logic/BookingEffector.scala">BookingEffector</a>). In the provided runtimes, the resulting <code>F[Unit]</code> is executed in <em>run &amp; forget</em> mode so that command reply is not delayed by any lengthy side-effect (<code>Self</code> can be used to notify success or failure of asynchronous operations back to the entity).</p><div class="callout warning "><div class="callout-title">Warning</div>
+<p>In the provided Akka/Pekko runtimes, read-only commands (commands that do not generate events) do not trigger side-effects, which is sound practice. </p></div><div class="callout note "><div class="callout-title">Note</div>
+<p>Defining an effector is entirely optional, pass-in <code>EffectorInterpreter.unit[F, S, Alg, RepositoryAlg]</code> in <a href="api/akka-runtime/endless/runtime/akka/deploy/Deployer.html" title="endless.runtime.akka.deploy.Deployer"><code>deployRepository</code></a> if there are no side-effects to describe.</p></div>
 <h2><a href="#state-derived-side-effects" name="state-derived-side-effects" class="anchor"><span class="anchor-link"></span></a>State-derived side-effects</h2>
 <p><a href="api/core/endless/core/entity/StateReader.html" title="endless.core.entity.StateReader"><code>StateReader</code></a> allows reading the updated entity state after event persistence or recovery. </p>
 <h2><a href="#passivation" name="passivation" class="anchor"><span class="anchor-link"></span></a>Passivation</h2>
 <p><a href="api/core/endless/core/entity/Passivator.html" title="endless.core.entity.Passivator"><code>Passivator</code></a> allow fine grain control over passivation. In certain domains, entities can evolve into &ldquo;dormant&rdquo; states (e.g. after a <code>BookingCancelled</code> event) for which it is beneficial to trigger passivation, either immediately or after a certain delay. This enables proactive optimization of cluster resources.</p>
 <h2><a href="#self-process-definition" name="self-process-definition" class="anchor"><span class="anchor-link"></span></a>Self &amp; process definition</h2>
-<p><a href="api/core/endless/core/entity/Self.html" title="endless.core.entity.Self"><code>Self</code></a> exposes the algebra of the entity within the effector context. This allows definition of asynchronous processes that involve interaction with the very same entity, typically to define entities acting as <a href="https://www.infoq.com/news/2017/07/process-managers-event-flows/">process managers</a> (see below for more detail). </p><div class="callout note tip"><div class="callout-title">At least once delivery with zero latency</div>
+<p><a href="api/core/endless/core/entity/Self.html" title="endless.core.entity.Self"><code>Self</code></a> exposes the algebra of the entity. This allows definition of asynchronous processes that involve interaction with the very same entity, typically to define entities acting as <a href="https://www.infoq.com/news/2017/07/process-managers-event-flows/">process managers</a> (see below for more detail). </p><div class="callout note tip"><div class="callout-title">At least once delivery with zero latency</div>
 <p>For most processes, <em>at least once</em> delivery guarantees are required. This can be achieved with a projection, however at the cost of some incurred latency. Actual latency depends on the database and event journal implementation used, as well as the projection throughput. One must also make sure to distribute the projection across the cluster to avoid creating a central choke point. Even so, if a projector process gets stalled for some reason, this can create a cascade effect with events pending processing building up. </p>
 <p>An effective alternative to using a projection is to track process completion in the entity state itself. Launching asynchronous operations directly as a side-effect of an event has zero latency overhead and also the added advantage that the process launches within the node of the entity which triggered it, thus benefiting from inherent distribution. </p>
-<p>By enabling <a href="https://doc.akka.io/docs/akka/current/typed/cluster-sharding.html#remembering-entities"><em>remember-entities</em></a>, we can achieve guaranteed <em>at-least-once</em> completion of asynchronous processes thanks to effector running right after recovery (thus withstanding node crash or shard rebalancing).</p>
-<p><em>endless</em> makes it easy to implement this pattern with <code>Self</code>. Here&rsquo;s the recipe, as illustrated in the example application <a href="https://github.com/endless4s/endless/tree/v0.26.0/example/src/main/scala/endless/example/logic/BookingEffector.scala">example</a>:</p>
+<p>By enabling <a href="https://pekko.apache.org/docs/pekko/current/typed/cluster-sharding.html#remembering-entities"><em>remember-entities</em></a>, we can achieve guaranteed <em>at-least-once</em> completion of asynchronous processes thanks to effector running right after recovery (thus withstanding node crash or shard rebalancing).</p>
+<p><em>endless</em> makes it easy to implement this pattern with <code>Self</code>. Here&rsquo;s the recipe, as illustrated in the example application <a href="https://github.com/endless4s/endless/tree/v0.27.0/example/src/main/scala/endless/example/logic/BookingEffector.scala">example</a>:</p>
 <ol>
   <li><code>BookingPlaced</code> event gets persisted. At this point, entity state represents pending acceptation of the booking <code>Booking(..., status = Pending)</code></li>
   <li>Effector function inspects the state, and in case of <code>Pending</code> status, asks a third-party service for availability and notifies the entity of the result:</li>
 </ol>
 <pre class="prettyprint"><code class="language-scala">val availabilityProcess: Booking =&gt; F[Unit] = booking =&gt;
-      booking.status match {
-        case Status.Pending =&gt;
-          for {
-            isAvailable &lt;- availabilityAlg.isCapacityAvailable(booking.time, booking.passengerCount)
-            entity &lt;- self
-            _ &lt;- entity.notifyCapacity(isAvailable)
-          } yield ()
-        case _ =&gt; ().pure
-      }
+  booking.status match {
+    case Status.Pending =&gt;
+      (availabilityAlg.isCapacityAvailable(
+        booking.time,
+        booking.passengerCount
+      ) &gt;&gt;= self.notifyCapacity).void
+    case _ =&gt; ().pure
+  }
 </code></pre>
 <p>3.<code>BookingAccepted</code> or <code>BookingRejected</code> events are persisted and entity state is updated accordingly.</p></div>
 </div>
 <div>
-<a href="https://github.com/endless4s/endless/tree/v0.26.0/documentation/src/main/paradox/effector.md" title="Edit this page" class="md-source-file md-edit">
+<a href="https://github.com/endless4s/endless/tree/v0.27.0/documentation/src/main/paradox/effector.md" title="Edit this page" class="md-source-file md-edit">
 Edit this page
 </a>
 </div>
 <div class="print-only">
 <span class="md-source-file md-version">
-0.26.0
+0.27.0
 </span>
 </div>
 </article>
@@ -267,7 +266,7 @@ Edit this page
 <footer class="md-footer">
 <div class="md-footer-nav">
 <nav class="md-footer-nav__inner md-grid">
-<a href="router.html" title="CommandRouter" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+<a href="side-effect.html" title="Side-effect" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
 <div class="md-flex__cell md-flex__cell--shrink">
 <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
 </div>
@@ -276,7 +275,7 @@ Edit this page
 <span class="md-footer-nav__direction">
 Previous
 </span>
-CommandRouter
+Side-effect
 </span>
 </div>
 </a>

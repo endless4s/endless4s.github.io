@@ -2,30 +2,24 @@
 'https://plantuml.com/sequence-diagram
 title Interactions of ""repository.bookingFor(id)""
 skinparam handwritten true
-skinparam TitleFontName Virgil 3 YOFF
-skinparam NoteFontName  Virgil 3 YOFF
-skinparam sequence {
- ParticipantFontName Virgil 3 YOFF
- ActorFontName Virgil 3 YOFF
- ReferenceFontName Virgil 3 YOFF
- MessageFontName Virgil 3 YOFF
- ArrowFontName Virgil 3 YOFF
-}
+skinparam defaultFontName Chalkboard
+
 participant "Domain logic" as Domain
-participant BookingRepository as BookingRepository
-participant RepositoryT as RepositoryT
+participant ShardedBookings as ShardedBookings
+participant Sharding as Sharding
 participant BookingCommandProtocol as BookingCommandProtocol1
-participant CommandRouter as CommandRouter
+participant CommandSender as CommandSender
 autonumber
 autoactivate on
 
-Domain -> BookingRepository: bookingFor(id)
-BookingRepository -> RepositoryT: entityFor(id)
-RepositoryT -> BookingCommandProtocol1: client()
-return client = BookingAlg[OutgoingCommand[*]]
-RepositoryT -> CommandRouter: routerForID(id)
+Domain -> ShardedBookings: bookingFor(id)
+ShardedBookings -> Sharding: entityFor(id)
+Sharding -> BookingCommandProtocol1: clientFor(id)
+BookingCommandProtocol1 -> CommandSender: senderForID(id)
 return nat = ""OutgoingCommand[*] ~> F""
+
+return client = BookingAlg[F]
+note right: Actor messaging is represented by a natural transformation
+
 return BookingAlg[F]
-return BookingAlg[F]
-note right: ""client.mapK(nat)""\nActor messaging is "embedded" via a natural transformation
 @enduml

@@ -144,18 +144,19 @@ endless4s/endless
   <li><a href="nutshell.html" class="active page">In a nutshell</a></li>
   <li><a href="abstractions.html" class="page">Abstractions</a>
   <ul>
-    <li><a href="repository.html" class="page">Repository</a></li>
+    <li><a href="sharding.html" class="page">Sharding</a></li>
     <li><a href="entity.html" class="page">Entity</a></li>
     <li><a href="durable-entity.html" class="page">Durable entity</a></li>
     <li><a href="applier.html" class="page">EventApplier</a></li>
     <li><a href="protocol.html" class="page">CommandProtocol</a></li>
-    <li><a href="router.html" class="page">CommandRouter</a></li>
+    <li><a href="sender.html" class="page">CommandSender</a></li>
+    <li><a href="side-effect.html" class="page">Side-effect</a></li>
     <li><a href="effector.html" class="page">Effector</a></li>
     <li><a href="name.html" class="page">EntityNameProvider</a></li>
     <li><a href="id.html" class="page">EntityIDCodec</a></li>
     <li><a href="deployer.html" class="page">Deployer</a></li>
   </ul></li>
-  <li><a href="runtime.html" class="page">Akka and Pekko runtimes</a></li>
+  <li><a href="runtime.html" class="page">Pekko and Akka runtimes</a></li>
   <li><a href="example.html" class="page">Example app</a></li>
   <li><a href="reference.html" class="page">Reference</a></li>
   <li><a href="inspiration.html" class="page">Inspiration</a></li>
@@ -168,7 +169,7 @@ endless4s/endless
 <ul style="display: none">
 <li class="md-nav__item md-version" id="project.version">
 <label class="md-nav__link" for="__version">
-<i class="md-icon" title="Version">label_outline</i> 0.26.0
+<i class="md-icon" title="Version">label_outline</i> 0.27.0
 </label>
 </li>
 </ul>
@@ -179,27 +180,28 @@ endless4s/endless
 <article class="md-content__inner md-typeset">
 <div class="md-content__searchable">
 <h1><a href="#in-a-nutshell" name="in-a-nutshell" class="anchor"><span class="anchor-link"></span></a>In a nutshell</h1>
-<p><em>Endless</em> bridges the gap between <a href="https://typelevel.org/cats-effect/">Cats Effect</a> and <a href="https://doc.akka.io/docs/akka/current/typed/cluster-sharding.html">Akka Cluster Sharding</a>. It makes it possible to define abstract repository and entity algebras in tagless-final style to describe distributed event sourced domains seamlessly within functional codebases. </p>
-<p>Implementations for various aspects of an entity are provided via abstract interpreters making use of endless <a href="https://en.wikipedia.org/wiki/Type_class"><em>typeclasses</em></a>:</p>
+<p><em>Endless</em> bridges the gap between <a href="https://typelevel.org/cats-effect/">Cats Effect</a> and <a href="https://pekko.apache.org/docs/pekko/current/typed/cluster-sharding.html">Pekko/Akka Cluster Sharding</a>. It makes it possible to define abstract repository and entity algebras in tagless-final style to describe distributed event sourced domains seamlessly within functional codebases. Writing applications using endless&rsquo;s abstraction layer also makes it easy to switch between actor frameworks. </p>
+<p>Implementation of the various aspects of an entity can be done using endless <a href="https://en.wikipedia.org/wiki/Type_class"><em>typeclasses</em></a> and abstractions:</p>
 <ul>
-  <li><a href="repository.html">Repository</a>: represents the ability to interact with a specific entity in the cluster</li>
-  <li><a href="entity.html">Entity</a>: ability to process a command by reading the state, writing events affecting the state and producing a reply (direct state persistence is supported with <a href="durable-entity.html">DurableEntity</a>)</li>
-  <li><a href="applier.html">EventApplier</a>: ability to <a href="https://en.wikipedia.org/wiki/Fold_(higher-order_function)"><em>fold</em></a> events over entity state</li>
+  <li><a href="sharding.html">Sharding</a>: represents the ability to interact with a specific entity in the cluster</li>
+  <li><a href="entity.html">Entity</a>: ability to read entity state, write events and produce a reply (direct state persistence is supported with <a href="durable-entity.html">DurableEntity</a>)</li>
+  <li><a href="applier.html">EventApplier</a>: description of how to <a href="https://en.wikipedia.org/wiki/Fold_(higher-order_function)"><em>fold</em></a> events over entity state</li>
   <li><a href="protocol.html">CommandProtocol</a>: ability to translate entity algebra invocations into serializable commands and replies</li>
-  <li><a href="effector.html">Effector</a>: ability to produce side effects after event persistence, including passivation of the entity itself</li>
+  <li><a href="sender.html">CommandSender</a>: ability to deliver a command to its target entity, and provide the reply back to the sender (transport layer)</li>
+  <li><a href="effector.html">Effector</a>: ability to produce side effects after event persistence, including control of entity passivation and chaining further interactions with the entity itself</li>
 </ul>
-<p>The provided Akka runtime is a thin layer over Akka Cluster Sharding and relies exclusively on Akka&rsquo;s public API. It simply makes use of Akka Persistence entity behavior DSL behind the scenes, while allowing for full customization of the entity behavior if lower-level tweaks are required. </p><div class="callout note "><div class="callout-title">Genericity</div>
-<p>Abstractions defined here are universal and could also be operated with a different event-sourcing framework or even a custom implementation. At the moment, built-in support for Akka is provided only.</p></div><div class="callout note tip"><div class="callout-title">For more info</div>
+<p>The provided Pekko/Akka runtimes are a thin layer over Cluster Sharding. They rely exclusively on the usual public APIs (the Persistence DSL in particular) and allow for full customization of the entity behavior if lower-level tweaks are required. </p><div class="callout note "><div class="callout-title">Genericity</div>
+<p>Abstractions defined here are universal and could also be operated with a different event-sourcing framework or even a custom implementation. At the moment, built-in support for both Pekko and Akka is provided. A native implementation for Kubernetes is also in the works.</p></div><div class="callout note tip"><div class="callout-title">For more info</div>
 <p>Check out the blog article <a href="https://jonas-chapuis.medium.com/functional-event-sourcing-with-akka-and-cats-7c075939fbdc">Functional event-sourcing with cats-effect</a></p></div>
 </div>
 <div>
-<a href="https://github.com/endless4s/endless/tree/v0.26.0/documentation/src/main/paradox/nutshell.md" title="Edit this page" class="md-source-file md-edit">
+<a href="https://github.com/endless4s/endless/tree/v0.27.0/documentation/src/main/paradox/nutshell.md" title="Edit this page" class="md-source-file md-edit">
 Edit this page
 </a>
 </div>
 <div class="print-only">
 <span class="md-source-file md-version">
-0.26.0
+0.27.0
 </span>
 </div>
 </article>

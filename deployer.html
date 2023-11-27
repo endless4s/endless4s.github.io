@@ -144,18 +144,19 @@ endless4s/endless
   <li><a href="nutshell.html" class="page">In a nutshell</a></li>
   <li><a href="abstractions.html" class="page">Abstractions</a>
   <ul>
-    <li><a href="repository.html" class="page">Repository</a></li>
+    <li><a href="sharding.html" class="page">Sharding</a></li>
     <li><a href="entity.html" class="page">Entity</a></li>
     <li><a href="durable-entity.html" class="page">Durable entity</a></li>
     <li><a href="applier.html" class="page">EventApplier</a></li>
     <li><a href="protocol.html" class="page">CommandProtocol</a></li>
-    <li><a href="router.html" class="page">CommandRouter</a></li>
+    <li><a href="sender.html" class="page">CommandSender</a></li>
+    <li><a href="side-effect.html" class="page">Side-effect</a></li>
     <li><a href="effector.html" class="page">Effector</a></li>
     <li><a href="name.html" class="page">EntityNameProvider</a></li>
     <li><a href="id.html" class="page">EntityIDCodec</a></li>
     <li><a href="deployer.html" class="active page">Deployer</a></li>
   </ul></li>
-  <li><a href="runtime.html" class="page">Akka and Pekko runtimes</a></li>
+  <li><a href="runtime.html" class="page">Pekko and Akka runtimes</a></li>
   <li><a href="example.html" class="page">Example app</a></li>
   <li><a href="reference.html" class="page">Reference</a></li>
   <li><a href="inspiration.html" class="page">Inspiration</a></li>
@@ -168,7 +169,7 @@ endless4s/endless
 <ul style="display: none">
 <li class="md-nav__item md-version" id="project.version">
 <label class="md-nav__link" for="__version">
-<i class="md-icon" title="Version">label_outline</i> 0.26.0
+<i class="md-icon" title="Version">label_outline</i> 0.27.0
 </label>
 </li>
 </ul>
@@ -180,38 +181,45 @@ endless4s/endless
 <div class="md-content__searchable">
 <h1><a href="#deployer" name="deployer" class="anchor"><span class="anchor-link"></span></a>Deployer</h1>
 <pre class="prettyprint"><code class="language-scala">trait Deployer {
-  def deployRepository[F[_]: Async, ID: EntityIDCodec, S, E, Alg[_[_]]: FunctorK, RepositoryAlg[_[_]]](
+  def deployRepository[F[_]: Async, ID: EntityIDCodec, S, E, Alg[_[_]], RepositoryAlg[_[_]]](
       repository: RepositoryInterpreter[F, ID, Alg, RepositoryAlg],
-      entity: EntityInterpreter[F, S, E, Alg],
-      effector: EffectorInterpreter[F, S, Alg, RepositoryAlg]
-  )(implicit
+      behavior: BehaviorInterpreter[F, S, E, Alg],
+      sideEffect: SideEffectInterpreter[F, S, Alg, RepositoryAlg]
+    )(implicit
       nameProvider: EntityNameProvider[ID],
-      commandProtocol: CommandProtocol[Alg],
+      commandProtocol: CommandProtocol[ID, Alg],
       eventApplier: EventApplier[S, E],
       parameters: DeploymentParameters[F, ID, S, E]
-  ): Resource[F, Deployment[F, RepositoryAlg]]
+    ): Resource[F, Deployment[F, RepositoryAlg]]
 }
 </code></pre>
-<p><a href="api/core/endless/core/entity/Deployer.html" title="endless.core.entity.Deployer"><code>Deployer</code></a> brings everything together to &ldquo;deploy&rdquo; an entity repository. It returns a <code>Deployment</code> instance wrapped in a cats-effect <code>Resource</code> (since deployments typically require finalization). The <code>Deployment</code> type is defined by implementers (aka. the runtime, e.g. <a href="api/runtime/endless/runtime/pekko/deploy/PekkoDeployer.html" title="endless.runtime.pekko.deploy.PekkoDeployer"><code>PekkoDeployer</code></a>), but it is meant to provide the <code>RepositoryAlg</code> instance allowing for interactions with the deployed repository. It can also provide extra fields or methods that are relevant to the particular runtime. </p>
+<p><a href="api/core/endless/core/entity/Deployer.html" title="endless.core.entity.Deployer"><code>Deployer</code></a> brings everything together to &ldquo;materialize&rdquo; an entity repository. It returns a <code>Deployment</code> instance wrapped in a cats-effect <code>Resource</code> (to support finalization). The <code>Deployment</code> type is defined by implementers (aka. the runtime, e.g. <a href="api/pekko-runtime/endless/runtime/pekko/deploy/PekkoDeployer.html" title="endless.runtime.pekko.deploy.PekkoDeployer"><code>PekkoDeployer</code></a>), and is meant to provide a <code>RepositoryAlg</code> instance allowing for interactions with the deployed repository. It can also expose extra fields or methods that are relevant to the particular runtime. </p>
 <p><code>deployRepository</code> is parametrized with the following type parameters:</p>
 <ul>
   <li><code>F[_]</code>: abstract effectful context <code>F</code> encapsulating all values, e.g. <code>IO[*]</code></li>
-  <li><code>Alg[_[_]]</code>: algebra allowing interaction with the entity, e.g. <a href="https://github.com/endless4s/endless/tree/v0.26.0/example/src/main/scala/endless/example/algebra/BookingAlg.scala">BookingAlg[IO[*]]</a></li>
+  <li><code>Alg[_[_]]</code>: algebra allowing interaction with the entity, e.g. <a href="https://github.com/endless4s/endless/tree/v0.27.0/example/src/main/scala/endless/example/algebra/BookingAlg.scala">BookingAlg[IO[*]]</a></li>
+  <li><code>RepositoryAlg[_[_]]</code>: repository algebra, e.g. <a href="https://github.com/endless4s/endless/tree/v0.27.0/example/src/main/scala/endless/example/repository/BookingRepositoryAlg.scala">BookingRepositoryAlg[IO[*]]</a></li>
   <li><code>ID</code>: entity ID, e.g. <code>final case class BookingID(id: UUID) extends AnyVal</code></li>
-  <li><code>S</code>: entity state, e.g. <a href="https://github.com/endless4s/endless/tree/v0.26.0/example/src/main/scala/endless/example/data/Booking.scala">Booking</a></li>
-  <li><code>E</code>: entity event, e.g. <a href="https://github.com/endless4s/endless/tree/v0.26.0/example/src/main/scala/endless/example/data/BookingEvent.scala">BookingEvent</a></li>
-  <li><code>RepositoryAlg[_[_]]</code>: repository algebra, e.g. <a href="https://github.com/endless4s/endless/tree/v0.26.0/example/src/main/scala/endless/example/repository/BookingRepositoryAlg.scala">BookingRepositoryAlg[IO[*]]</a></li>
+  <li><code>S</code>: entity state, e.g. <a href="https://github.com/endless4s/endless/tree/v0.27.0/example/src/main/scala/endless/example/data/Booking.scala">Booking</a></li>
+  <li><code>E</code>: entity event, e.g. <a href="https://github.com/endless4s/endless/tree/v0.27.0/example/src/main/scala/endless/example/data/BookingEvent.scala">BookingEvent</a></li>
 </ul>
-<p>Repository operation relies on the three provided interpreted algebras for <code>repository</code>, <code>entity</code> and <code>effector</code>. They are used in combination, following a strictly defined sequence:  1. the repository is used to create a handle on the entity with the specified ID. This handle implements the entity algebra, with which the caller can interact with the entity.  2. when a a function of the entity algebra is invoked, this invocation is serialized using the <code>commandProtocol</code> and sent over the wire thanks to the <a href="endless.core.protocol.CommandRouter">CommandRouter</a>. On the receiving node, the message is decoded and interpreted by the provided <code>EntityT</code>-based interpreter: typically involving reading the entity state (e.g. for validation), and writing events (which can lead to a new version of the state via the <code>eventApplier</code> function)  3. after events are written, a possible side-effect is triggered: this supports asynchronicity (i.e. fibers can be spawned, etc.)  4. the function finally returns to the caller with the result of the operation, encoded over the wire as a reply using <code>commandProtocol</code> and routed back to the caller thanks to the <code>CommandRouter</code>.</p>
+<p>Repository operation is defined by the interpreted repository, behavior and side-effect algebras, following a strictly defined sequence:</p>
+<ol>
+  <li>the interpreted repository is used to create a handle on the entity with the specified ID. This handle implements the entity algebra, using which the caller can interact with the entity.</li>
+  <li>when a function of the entity algebra is invoked, the invocation is serialized using the <code>commandProtocol</code> and sent over the wire thanks to <a href="endless.core.protocol.CommandSender">CommandSender</a>. It is then decoded on the server side and run with the provided <code>behavior</code> interpreter: this typically involves reading the entity state (e.g. for validation) and writing events (which leads to a new version of the state via the <code>eventApplier</code> folding function)</li>
+  <li>after events are written, a possible side-effect is triggered: this supports asynchronicity (i.e. starting fibers)</li>
+  <li>the function finally returns to the caller with the result of the operation, encoded over the wire as a reply using <code>commandProtocol</code> and delivered back to the caller thanks to <code>CommandSender</code>.</li>
+</ol>
+<p>See also sequence diagrams in <a href="example.html">Example App</a> that represent this flow for a concrete entity.</p>
 </div>
 <div>
-<a href="https://github.com/endless4s/endless/tree/v0.26.0/documentation/src/main/paradox/deployer.md" title="Edit this page" class="md-source-file md-edit">
+<a href="https://github.com/endless4s/endless/tree/v0.27.0/documentation/src/main/paradox/deployer.md" title="Edit this page" class="md-source-file md-edit">
 Edit this page
 </a>
 </div>
 <div class="print-only">
 <span class="md-source-file md-version">
-0.26.0
+0.27.0
 </span>
 </div>
 </article>
@@ -234,13 +242,13 @@ EntityIDCodec
 </span>
 </div>
 </a>
-<a href="runtime.html" title="Akka and Pekko runtimes" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+<a href="runtime.html" title="Pekko and Akka runtimes" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
 <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
 <span class="md-flex__ellipsis">
 <span class="md-footer-nav__direction">
 Next
 </span>
-Akka and Pekko runtimes
+Pekko and Akka runtimes
 </span>
 </div>
 <div class="md-flex__cell md-flex__cell--shrink">

@@ -144,18 +144,19 @@ endless4s/endless
   <li><a href="nutshell.html" class="page">In a nutshell</a></li>
   <li><a href="abstractions.html" class="page">Abstractions</a>
   <ul>
-    <li><a href="repository.html" class="page">Repository</a></li>
+    <li><a href="sharding.html" class="page">Sharding</a></li>
     <li><a href="entity.html" class="active page">Entity</a></li>
     <li><a href="durable-entity.html" class="page">Durable entity</a></li>
     <li><a href="applier.html" class="page">EventApplier</a></li>
     <li><a href="protocol.html" class="page">CommandProtocol</a></li>
-    <li><a href="router.html" class="page">CommandRouter</a></li>
+    <li><a href="sender.html" class="page">CommandSender</a></li>
+    <li><a href="side-effect.html" class="page">Side-effect</a></li>
     <li><a href="effector.html" class="page">Effector</a></li>
     <li><a href="name.html" class="page">EntityNameProvider</a></li>
     <li><a href="id.html" class="page">EntityIDCodec</a></li>
     <li><a href="deployer.html" class="page">Deployer</a></li>
   </ul></li>
-  <li><a href="runtime.html" class="page">Akka and Pekko runtimes</a></li>
+  <li><a href="runtime.html" class="page">Pekko and Akka runtimes</a></li>
   <li><a href="example.html" class="page">Example app</a></li>
   <li><a href="reference.html" class="page">Reference</a></li>
   <li><a href="inspiration.html" class="page">Inspiration</a></li>
@@ -175,7 +176,7 @@ endless4s/endless
 <ul style="display: none">
 <li class="md-nav__item md-version" id="project.version">
 <label class="md-nav__link" for="__version">
-<i class="md-icon" title="Version">label_outline</i> 0.26.0
+<i class="md-icon" title="Version">label_outline</i> 0.27.0
 </label>
 </li>
 </ul>
@@ -210,7 +211,7 @@ trait EventWriter[F[_], E] {
 }
 trait Entity[F[_], S, E] extends StateReader[F, S] with EventWriter[F, E]
 </code></pre>
-<p><a href="api/core/endless/core/entity/Entity.html" title="endless.core.entity.Entity"><code>Entity</code></a> is parametrized with entity state <code>S</code> and events <code>E</code>. It is a typeclass which represents reader-writer capabilities for <code>F</code> with event-sourcing semantics, i.e. the abilities to read current entity state from the context and persist events. <code>Entity</code> is typically used by the entity algebra command handling interpreter (e.g. <a href="https://github.com/endless4s/endless/tree/v0.26.0/example/src/main/scala/endless/example/logic/BookingEntity.scala">BookingEntity</a>). </p>
+<p><a href="api/core/endless/core/entity/Entity.html" title="endless.core.entity.Entity"><code>Entity</code></a> is parametrized with entity state <code>S</code> and events <code>E</code>. It is a typeclass which represents reader-writer capabilities for <code>F</code> with event-sourcing semantics, i.e. the abilities to read current entity state from the context and persist events. <code>Entity</code> is used to describe entity behavior (e.g. <a href="https://github.com/endless4s/endless/tree/v0.27.0/example/src/main/scala/endless/example/logic/BookingEntity.scala">BookingEntity</a>). </p>
 <h2><a href="#functional-event-sourcing" name="functional-event-sourcing" class="anchor"><span class="anchor-link"></span></a>Functional event sourcing</h2>
 <p><em>Reader-writer</em> is a natural fit for describing event sourcing behavior: the monadic chain represents event sequencing and corresponding evolution of the state (see also <a href="https://pavkin.ru/aecor-part-2/">here</a> and <a href="https://www.youtube.com/watch?v=kDkRRkkVlxQ">here</a>).</p>
 <p>Advantages of this abstraction are:</p>
@@ -218,11 +219,12 @@ trait Entity[F[_], S, E] extends StateReader[F, S] with EventWriter[F, E]
   <li>the command is the call and the reply is simply the final resulting value in the monadic chain, there are no explicit representations</li>
   <li>maximal composability since it&rsquo;s just <code>flatMap</code> all the way down, making it easier to work with a reduced set of events</li>
   <li><code>read</code> always provides the up-to-date state and event folding happens transparently behind the scenes</li>
-  <li>pure &amp; side-effect free logic that is easy to test</li>
+  <li>pure &amp; side-effect-free logic that is easy to test</li>
+  <li>the algebra interpreter does not support asynchronicity or other such effects lower in the hierarchy, which makes it impossible to accidentally introduce them in the command handling logic</li>
 </ul><div class="callout warning "><div class="callout-title">Responsivity</div>
 <p>When defining event-sourced entities, it is considered best practice to process commands and formulate a reply quickly as it makes the system responsive. Long-running processes should only initiate as the result of events, which also has the added benefit that they can be restored upon recovery or be driven by a projection. See <a href="effector.html">Effector</a> to find out how to describe side effects with <em>endless</em>. </p></div><div class="callout note "><div class="callout-title">About performance</div>
 <p>When composing a sequence of computations which has multiple <em>writes</em> with interspersed <em>reads</em>, the state is folded before each read by the interpreter. This is necessary to provide a constant version of the state during interpretation.</p>
-<p>This is an operation that the runtime (Akka) will also do behind the scenes when evolving the entity state. Redundant invocations of the folding function can therefore occur with the elevated monadic abstraction. </p>
+<p>This is an operation that the runtime (Pekko/Akka) will also do behind the scenes when evolving the entity state. Redundant invocations of the folding function can therefore occur with the elevated monadic abstraction. </p>
 <p>However, in most cases this overhead is insignificant:</p>
 <ul>
   <li>event application needs to be as fast and simple as possible as it is of course invoked repeatedly for each event during recovery</li>
@@ -231,13 +233,13 @@ trait Entity[F[_], S, E] extends StateReader[F, S] with EventWriter[F, E]
 </ul></div>
 </div>
 <div>
-<a href="https://github.com/endless4s/endless/tree/v0.26.0/documentation/src/main/paradox/entity.md" title="Edit this page" class="md-source-file md-edit">
+<a href="https://github.com/endless4s/endless/tree/v0.27.0/documentation/src/main/paradox/entity.md" title="Edit this page" class="md-source-file md-edit">
 Edit this page
 </a>
 </div>
 <div class="print-only">
 <span class="md-source-file md-version">
-0.26.0
+0.27.0
 </span>
 </div>
 </article>
@@ -247,7 +249,7 @@ Edit this page
 <footer class="md-footer">
 <div class="md-footer-nav">
 <nav class="md-footer-nav__inner md-grid">
-<a href="repository.html" title="Repository" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+<a href="sharding.html" title="Sharding" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
 <div class="md-flex__cell md-flex__cell--shrink">
 <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
 </div>
@@ -256,7 +258,7 @@ Edit this page
 <span class="md-footer-nav__direction">
 Previous
 </span>
-Repository
+Sharding
 </span>
 </div>
 </a>
