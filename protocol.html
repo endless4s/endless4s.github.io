@@ -169,7 +169,7 @@ endless4s/endless
 <ul style="display: none">
 <li class="md-nav__item md-version" id="project.version">
 <label class="md-nav__link" for="__version">
-<i class="md-icon" title="Version">label_outline</i> 0.27.0
+<i class="md-icon" title="Version">label_outline</i> 0.28.0
 </label>
 </li>
 </ul>
@@ -187,20 +187,20 @@ endless4s/endless
 </code></pre>
 <p><a href="api/core/endless/core/protocol/CommandProtocol.html" title="endless.core.protocol.CommandProtocol"><code>CommandProtocol</code></a> is to be implemented for each entity algebra. It provides an RPC-like <code>client</code> in charge of transforming calls into instances of <a href="api/core/endless/core/protocol/OutgoingCommand.html" title="endless.core.protocol.OutgoingCommand"><code>OutgoingCommand</code></a>, delivering such commands to the targeted entity using a <a href="api/core/endless/core/protocol/CommandSender.html" title="endless.core.protocol.CommandSender"><code>CommandSender</code></a> and decoding the reply. It also defines the corresponding <code>server</code>, which can decode commands into <a href="api/core/endless/core/protocol/IncomingCommand.html" title="endless.core.protocol.IncomingCommand"><code>IncomingCommand</code></a> instances, run the corresponding entity logic and encode the reply.</p>
 <p><code>OutgoingCommand</code> is able to encode the command into a binary representation ready to be sent over the wire and also decode the expected subsequent reply. <code>IncomingCommand</code> is able to decode the incoming command, invoke the corresponding handler and encode the reply.</p>
-<p>In other words, <code>clientFor</code> materializes algebra invocations into outgoing commands delivered to <code>server</code>, which acts as a switchboard for incoming commands. See <a href="https://github.com/endless4s/endless/tree/v0.27.0/example/src/main/scala/endless/example/protocol/BookingCommandProtocol.scala">BookingCommandProtocol</a> for a concrete example.</p><div class="callout note info"><div class="callout-title">Explicit or implicit representations</div>
+<p>In other words, <code>clientFor</code> materializes algebra invocations into outgoing commands delivered to <code>server</code>, which acts as a switchboard for incoming commands. See <a href="https://github.com/endless4s/endless/tree/v0.28.0/example/src/main/scala/endless/example/protocol/BookingCommandProtocol.scala">BookingCommandProtocol</a> for a concrete example.</p><div class="callout note info"><div class="callout-title">Explicit or implicit representations</div>
 <p><code>CommandProtocol</code> is the entry point for implementations to map algebra entries to concrete commands and replies. Having these lower-level aspects described separately makes it easier to have precise control of versions and to deal with migration challenges. </p>
 <p>We provide helpers for definition of binary protocols in <code>endless-protobuf-helpers</code> as well as <code>endless-scodec-helpers</code> and JSON protocols in <code>endless-circe-helpers</code>.</p>
 <p>Definition of protobuf protocols is very convenient using <code>endless-protobuf-helpers</code> because scalaPB-generated types can be referenced directly, there is no need for a separate representation of commands (and associated data-mapping headaches).</p></div><div class="callout note tip"><div class="callout-title">Testing</div>
-<p>Command protocols can be tested in isolation via synchronous round-trip exercise of the journey <em>client invocation -&gt; command materialization -&gt; command encoding -&gt; command decoding -&gt; behavior invocation -&gt; reply materialization -&gt; reply encoding -&gt; reply decoding</em>. See <a href="https://github.com/endless4s/endless/tree/v0.27.0/example/src/test/scala/endless/example/protocol/BookingCommandProtocolSuite.scala">BookingCommandProtocolSuite</a> for an example.</p></div>
+<p>Command protocols can be tested in isolation via synchronous round-trip exercise of the journey <em>client invocation -&gt; command materialization -&gt; command encoding -&gt; command decoding -&gt; behavior invocation -&gt; reply materialization -&gt; reply encoding -&gt; reply decoding</em>. See <a href="https://github.com/endless4s/endless/tree/v0.28.0/example/src/test/scala/endless/example/protocol/BookingCommandProtocolSuite.scala">BookingCommandProtocolSuite</a> for an example.</p></div>
 </div>
 <div>
-<a href="https://github.com/endless4s/endless/tree/v0.27.0/documentation/src/main/paradox/protocol.md" title="Edit this page" class="md-source-file md-edit">
+<a href="https://github.com/endless4s/endless/tree/v0.28.0/documentation/src/main/paradox/protocol.md" title="Edit this page" class="md-source-file md-edit">
 Edit this page
 </a>
 </div>
 <div class="print-only">
 <span class="md-source-file md-version">
-0.27.0
+0.28.0
 </span>
 </div>
 </article>
