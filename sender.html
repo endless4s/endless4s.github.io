@@ -169,7 +169,7 @@ endless4s/endless
 <ul style="display: none">
 <li class="md-nav__item md-version" id="project.version">
 <label class="md-nav__link" for="__version">
-<i class="md-icon" title="Version">label_outline</i> 0.28.0
+<i class="md-icon" title="Version">label_outline</i> 0.29.0
 </label>
 </li>
 </ul>
@@ -186,16 +186,16 @@ endless4s/endless
 </code></pre>
 <p><a href="api/core/endless/core/protocol/CommandSender.html" title="endless.core.protocol.CommandSender"><code>CommandSender</code></a> represents the ability to deliver a command to its target entity. It provides a natural transformation of <code>OutgoingCommand</code> types &ldquo;back to&rdquo; <code>F</code>, where the &ldquo;transformation&rdquo; is typically the flow of encoding/decoding and delivering command/responses in the cluster ultimately leading back to a <code>F[A]</code> reply value. </p>
 <p>In other words, it implements the transport layer of the cluster, and is typically provided by the runtime.</p>
-<p>The built-in implementations in Pekko and Akka runtimes simply rely on an actor <code>ask</code>: <a href="https://github.com/endless4s/endless/tree/v0.28.0/runtime/src/main/scala/endless/runtime/pekko/ShardingCommandSender.scala">ShardingCommandSender</a></p>
+<p>The built-in implementations in Pekko and Akka runtimes simply rely on an actor <code>ask</code>: <a href="https://github.com/endless4s/endless/tree/v0.29.0/runtime/src/main/scala/endless/runtime/pekko/ShardingCommandSender.scala">ShardingCommandSender</a></p>
 </div>
 <div>
-<a href="https://github.com/endless4s/endless/tree/v0.28.0/documentation/src/main/paradox/sender.md" title="Edit this page" class="md-source-file md-edit">
+<a href="https://github.com/endless4s/endless/tree/v0.29.0/documentation/src/main/paradox/sender.md" title="Edit this page" class="md-source-file md-edit">
 Edit this page
 </a>
 </div>
 <div class="print-only">
 <span class="md-source-file md-version">
-0.28.0
+0.29.0
 </span>
 </div>
 </article>

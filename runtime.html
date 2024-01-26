@@ -177,7 +177,7 @@ endless4s/endless
 <ul style="display: none">
 <li class="md-nav__item md-version" id="project.version">
 <label class="md-nav__link" for="__version">
-<i class="md-icon" title="Version">label_outline</i> 0.28.0
+<i class="md-icon" title="Version">label_outline</i> 0.29.0
 </label>
 </li>
 </ul>
@@ -210,7 +210,7 @@ endless4s/endless
 <p>The entrypoint is available by importing <code>endless.runtime.pekko.syntax.deploy.*</code> or <code>endless.runtime.akka.syntax.deploy.*</code> and calling <code>deployRepository</code> with the required parameters. </p>
 <p>This function ties everything together and delivers a cats effect <a href="https://typelevel.org/cats-effect/docs/std/resource" title="Resource" target="_blank" rel="noopener noreferrer">Resource</a> with an instance of <a href="endless.runtime.pekko.deploy.DeployedPekkoRepository">DeployedPekkoRepository</a> in context <code>F</code> bundling the <code>RepositoryAlg</code> instance together with the ref to the shard region actor returned by the call to Pekko&rsquo;s <a href="https://doc.akka.io/docs/akka/current/typed/cluster-sharding.html#basic-example" title="ClusterSharding.init" target="_blank" rel="noopener noreferrer">ClusterSharding.init</a>.</p>
 <p>The following snippet is the scaffolding for the library&rsquo;s sample application (in its Pekko form), a simple API to manage vehicles and bookings:</p>
-<pre class="prettyprint"><button class="snippet-button copy-snippet" title="Copy snippet to clipboard">copy</button><a class="snippet-button go-to-source" href="https://github.com/endless4s/endless/tree/v0.28.0/example/src/main/scala/endless/example/app/pekko/PekkoApp.scala#L69-L135" target="_blank" title="Go to snippet source">source</a><code class="language-scala">Resource
+<pre class="prettyprint"><button class="snippet-button copy-snippet" title="Copy snippet to clipboard">copy</button><a class="snippet-button go-to-source" href="https://github.com/endless4s/endless/tree/v0.29.0/example/src/main/scala/endless/example/app/pekko/PekkoApp.scala#L69-L135" target="_blank" title="Go to snippet source">source</a><code class="language-scala">Resource
   .eval(Slf4jLogger.create[IO])
   .flatMap { implicit logger: Logger[IO] =&gt;
     PekkoCluster.managedResource[IO](actorSystem).flatMap {
@@ -284,10 +284,10 @@ endless4s/endless
 <p>The equivalent method for durable entities is <a href="api/core/endless/core/entity/DurableDeployer.html" title="endless.core.entity.DurableDeployer"><code>deployDurableRepository</code></a>.</p></div>
 <h2><a href="#internals" name="internals" class="anchor"><span class="anchor-link"></span></a>Internals</h2>
 <h3><a href="#protocol" name="protocol" class="anchor"><span class="anchor-link"></span></a>Protocol</h3>
-<p>Thanks to the <a href="protocol.html">CommandProtocol</a> instance, entity algebra calls can be &ldquo;materialized&rdquo; into concrete commands and replies. These types are encoded to a binary payload, which is transported within an internal protobuf envelope <a href="https://github.com/endless4s/endless/tree/v0.28.0/runtime/src/main/protobuf/command.proto">command.proto</a>.</p>
+<p>Thanks to the <a href="protocol.html">CommandProtocol</a> instance, entity algebra calls can be &ldquo;materialized&rdquo; into concrete commands and replies. These types are encoded to a binary payload, which is transported within an internal protobuf envelope <a href="https://github.com/endless4s/endless/tree/v0.29.0/runtime/src/main/protobuf/command.proto">command.proto</a>.</p>
 <p><a href="/runtime/src/main/scala/endless/runtime/pekko/ShardingCommandSender.scala">ShardingCommandSender</a> takes care of delivering the commands to the right entity and returning the reply simply by using Pekko/Akka&rsquo;s <code>ask</code>.</p>
 <h3><a href="#deployer" name="deployer" class="anchor"><span class="anchor-link"></span></a>Deployer</h3>
-<p>Internally, <a href="https://github.com/endless4s/endless/tree/v0.28.0/runtime/src/main/scala/endless/runtime/pekko/PekkoDeployer.scala">deployRepository</a> uses <a href="https://pekko.apache.org/docs/pekko/current/typed/persistence.html#example-and-core-api" title="EventSourcedBehavior" target="_blank" rel="noopener noreferrer">EventSourcedBehavior</a> DSL to configure the entity in the following way (for <a href="https://github.com/endless4s/endless/tree/v0.28.0/runtime/src/main/scala/endless/runtime/pekko/DurablePekkoDeployer.scala">deployDurableRepository</a>, this is <a href="https://pekko.apache.org/docs/pekko/current/typed/durable-state/persistence.html#cluster-sharding-and-durablestatebehavior">DurableStateBehavior</a>):</p>
+<p>Internally, <a href="https://github.com/endless4s/endless/tree/v0.29.0/runtime/src/main/scala/endless/runtime/pekko/PekkoDeployer.scala">deployRepository</a> uses <a href="https://pekko.apache.org/docs/pekko/current/typed/persistence.html#example-and-core-api" title="EventSourcedBehavior" target="_blank" rel="noopener noreferrer">EventSourcedBehavior</a> DSL to configure the entity in the following way (for <a href="https://github.com/endless4s/endless/tree/v0.29.0/runtime/src/main/scala/endless/runtime/pekko/DurablePekkoDeployer.scala">deployDurableRepository</a>, this is <a href="https://pekko.apache.org/docs/pekko/current/typed/durable-state/persistence.html#cluster-sharding-and-durablestatebehavior">DurableStateBehavior</a>):</p>
 <h4><a href="#command-handler" name="command-handler" class="anchor"><span class="anchor-link"></span></a>Command handler</h4>
 <ol>
   <li>use <a href="protocol.html">CommandProtocol.server</a> to decode the command and invoke the corresponding algebra logic, interpreted internally with <a href="api/core/endless/core/interpret/EntityT.html" title="endless.core.interpret.EntityT"><code>EntityT</code></a>. Interpretation of the monadic chain occurs, leading to one or more events and a return value.</li>
@@ -303,13 +303,13 @@ endless4s/endless
 <p>Since Akka/Pekko <a href="https://doc.akka.io/docs/akka/current/common/binary-compatibility-rules.html#mixed-versioning-is-not-allowed">does not allow mixed versions</a> in a project, Akka/Pekko dependencies of <code>endless-runtime-akka</code> and <code>endless-runtime-pekko</code> respectively are marked a <code>Provided</code>. This means that your application <code>libraryDependencies</code> needs to directly include Akka or Pekko as a dependency. The minimal supported Akka version is 2.6.20, and Pekko version is 1.0.2. </p></div>
 </div>
 <div>
-<a href="https://github.com/endless4s/endless/tree/v0.28.0/documentation/src/main/paradox/runtime.md" title="Edit this page" class="md-source-file md-edit">
+<a href="https://github.com/endless4s/endless/tree/v0.29.0/documentation/src/main/paradox/runtime.md" title="Edit this page" class="md-source-file md-edit">
 Edit this page
 </a>
 </div>
 <div class="print-only">
 <span class="md-source-file md-version">
-0.28.0
+0.29.0
 </span>
 </div>
 </article>
