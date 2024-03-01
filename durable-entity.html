@@ -8,7 +8,7 @@
 <meta property="og:title" content="Endless4s">
 <meta property="og:description" content="Scala library to describe event sourced entities using tagless-final algebras, running with built-in implementations for Akka.">
 <meta property="og:image" content="https://endless4s.github.io/logo-open-graph.png">
-<meta name="generator" content="Paradox, paradox-material-theme=0.6.0, mkdocs-material=3.0.3">
+<meta name="generator" content="Paradox, paradox-material-theme=0.7.0, mkdocs-material=3.0.3">
 
 <meta name="lang:clipboard.copy" content="Copy to clipboard">
 <meta name="lang:clipboard.copied" content="Copied to clipboard">
@@ -158,9 +158,9 @@ endless4s/endless
   </ul></li>
   <li><a href="runtime.html" class="page">Pekko and Akka runtimes</a></li>
   <li><a href="example.html" class="page">Example app</a></li>
+  <li><a href="transactions.html" class="page">Transactions</a></li>
   <li><a href="reference.html" class="page">Reference</a></li>
   <li><a href="inspiration.html" class="page">Inspiration</a></li>
-  <li><a href="discord.html" class="page">Questions &amp; answers</a></li>
 </ul>
 <nav class="md-nav md-nav--secondary">
 </nav>
@@ -169,7 +169,7 @@ endless4s/endless
 <ul style="display: none">
 <li class="md-nav__item md-version" id="project.version">
 <label class="md-nav__link" for="__version">
-<i class="md-icon" title="Version">label_outline</i> 0.29.0
+<i class="md-icon" title="Version">label_outline</i> 0.30.0
 </label>
 </li>
 </ul>
@@ -197,13 +197,13 @@ trait DurableEntity[F[_], S]
 <p>Such &ldquo;durable&rdquo; entities still benefit from sharding, passivation, rebalancing, automatic recovery etc. while keeping the persistence model simple. In effect, this is a way to implement CRUD-like distributed entities while retaining the advantages of actors, such as the ability to actively schedule side-effects, precise state-machine semantics, consistent distributed in-memory state, etc. </p>
 </div>
 <div>
-<a href="https://github.com/endless4s/endless/tree/v0.29.0/documentation/src/main/paradox/durable-entity.md" title="Edit this page" class="md-source-file md-edit">
+<a href="https://github.com/endless4s/endless/tree/v0.30.0/documentation/src/main/paradox/durable-entity.md" title="Edit this page" class="md-source-file md-edit">
 Edit this page
 </a>
 </div>
 <div class="print-only">
 <span class="md-source-file md-version">
-0.29.0
+0.30.0
 </span>
 </div>
 </article>
@@ -247,7 +247,7 @@ EventApplier
 Powered by
 <a href="https://github.com/lightbend/paradox">Paradox</a>
 and
-<a href="https://jonas.github.io/paradox-material-theme/">Paradox Material Theme</a>
+<a href="https://sbt.github.io/sbt-paradox-material-theme/">Paradox Material Theme</a>
 
 </div>
 <div class="md-footer-social">

@@ -8,7 +8,7 @@
 <meta property="og:title" content="Endless4s">
 <meta property="og:description" content="Scala library to describe event sourced entities using tagless-final algebras, running with built-in implementations for Akka.">
 <meta property="og:image" content="https://endless4s.github.io/logo-open-graph.png">
-<meta name="generator" content="Paradox, paradox-material-theme=0.6.0, mkdocs-material=3.0.3">
+<meta name="generator" content="Paradox, paradox-material-theme=0.7.0, mkdocs-material=3.0.3">
 
 <meta name="lang:clipboard.copy" content="Copy to clipboard">
 <meta name="lang:clipboard.copied" content="Copied to clipboard">
@@ -23,7 +23,7 @@
 
 <meta name="description" content="Scala library to describe event sourced entities using tagless-final algebras, running with built-in implementations for Akka.">
 <link rel="shortcut icon" href="favicon.png">
-<title>Questions & answers · </title>
+<title>Transactions · </title>
 <link rel="stylesheet" href="assets/stylesheets/application.451f80e5.css">
 <link rel="stylesheet" href="assets/stylesheets/application-palette.22915126.css">
 <meta name="theme-color" content="#546e7a" />
@@ -62,7 +62,7 @@ data-md-color-accent="red"
 <span class="md-header-nav__topic">
 </span>
 <span class="md-header-nav__topic">
-Questions & answers
+Transactions
 </span>
 </div>
 </div>
@@ -158,9 +158,9 @@ endless4s/endless
   </ul></li>
   <li><a href="runtime.html" class="page">Pekko and Akka runtimes</a></li>
   <li><a href="example.html" class="page">Example app</a></li>
+  <li><a href="transactions.html" class="active page">Transactions</a></li>
   <li><a href="reference.html" class="page">Reference</a></li>
   <li><a href="inspiration.html" class="page">Inspiration</a></li>
-  <li><a href="discord.html" class="active page">Questions &amp; answers</a></li>
 </ul>
 <nav class="md-nav md-nav--secondary">
 </nav>
@@ -169,7 +169,7 @@ endless4s/endless
 <ul style="display: none">
 <li class="md-nav__item md-version" id="project.version">
 <label class="md-nav__link" for="__version">
-<i class="md-icon" title="Version">label_outline</i> 0.29.0
+<i class="md-icon" title="Version">label_outline</i> 0.30.0
 </label>
 </li>
 </ul>
@@ -179,18 +179,18 @@ endless4s/endless
 <div class="md-content">
 <article class="md-content__inner md-typeset">
 <div class="md-content__searchable">
-<h2><a href="#questions-answers" name="questions-answers" class="anchor"><span class="anchor-link"></span></a>Questions &amp; answers</h2>
-<p>Join the discord channel!</p>
-<p><iframe src="https://discordapp.com/widget?id=917750013826838558&theme=dark" width="350" height="500" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe></html></p>
+<h1><a href="#transactions" name="transactions" class="anchor"><span class="anchor-link"></span></a>Transactions</h1>
+<img src="https://raw.githubusercontent.com/endless4s/endless-transaction/master/documentation/src/main/paradox/logo.svg" width="200">
+<p>Operations spanning multiple entities in the cluster often require coordination to ensure consistency. The <a href="https://endless4s.github.io/transaction">endless-transaction</a> side library, itself built with endless, allows to describe such cluster-spanning operations with the two-phase commit protocol and integrates smoothly with endless&rsquo;s abstractions. The library <a href="https://endless4s.github.io/transaction/example.html">example</a> illustrates this precise use case, with a cluster of bank accounts and a transfer feature implemented with transactions.</p>
 </div>
 <div>
-<a href="https://github.com/endless4s/endless/tree/v0.29.0/documentation/src/main/paradox/discord.md" title="Edit this page" class="md-source-file md-edit">
+<a href="https://github.com/endless4s/endless/tree/v0.30.0/documentation/src/main/paradox/transactions.md" title="Edit this page" class="md-source-file md-edit">
 Edit this page
 </a>
 </div>
 <div class="print-only">
 <span class="md-source-file md-version">
-0.29.0
+0.30.0
 </span>
 </div>
 </article>
@@ -200,7 +200,7 @@ Edit this page
 <footer class="md-footer">
 <div class="md-footer-nav">
 <nav class="md-footer-nav__inner md-grid">
-<a href="inspiration.html" title="Inspiration" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+<a href="example.html" title="Example app" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
 <div class="md-flex__cell md-flex__cell--shrink">
 <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
 </div>
@@ -209,8 +209,21 @@ Edit this page
 <span class="md-footer-nav__direction">
 Previous
 </span>
-Inspiration
+Example app
 </span>
+</div>
+</a>
+<a href="reference.html" title="Reference" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+<div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+<span class="md-flex__ellipsis">
+<span class="md-footer-nav__direction">
+Next
+</span>
+Reference
+</span>
+</div>
+<div class="md-flex__cell md-flex__cell--shrink">
+<i class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
 </div>
 </a>
 </nav>
@@ -221,7 +234,7 @@ Inspiration
 Powered by
 <a href="https://github.com/lightbend/paradox">Paradox</a>
 and
-<a href="https://jonas.github.io/paradox-material-theme/">Paradox Material Theme</a>
+<a href="https://sbt.github.io/sbt-paradox-material-theme/">Paradox Material Theme</a>
 
 </div>
 <div class="md-footer-social">
