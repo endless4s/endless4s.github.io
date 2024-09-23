@@ -11,8 +11,9 @@ algebras, following a strictly defined sequence:</p><ul><li>the interpreted repo
     <code>commandProtocol</code> and sent over the wire thanks to <code>CommandSender</code>. On the receiving node,
     the message is decoded and run with the provided <code>behavior</code> interpreter: this typically
     involves reading the entity state (e.g. for validation), and writing events (which can
-    lead to a new version of the state via the <code>eventApplier</code> function)</li><li>after events are written, a possible side-effect is triggered: this can be asynchronous
-    (i.e. the function doesn't wait for completion of the side-effect to return)</li><li>the function finally returns to the caller with the result of the operation described by
+    lead to a new version of the state via the <code>eventApplier</code> function)</li><li>after events are written, a possible side-effect is triggered: this is by default
+    asynchronous (i.e. the function doesn't wait for completion of the side-effect to return)
+    but can be made synchronous by overriding the <code>runModeFor</code> method in the <code>SideEffect</code></li><li>the function finally returns to the caller with the result of the operation described by
     the entity algebra (reply value, typically encoded over the wire in a distributed
     deployment)</li></ul><p>This interaction pattern occurs with "actor-like" semantics: all calls on the entity are
 processed in sequence.</p><p>The function is parameterized with the context <code>F</code> and the various involved types: <code>S</code> for

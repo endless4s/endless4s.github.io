@@ -8,8 +8,12 @@ resource is released.
   (<code>IO.executionContext</code>) for the actor system, as it supports Akka operation and it's simpler
   to have a single application execution context</p></dd><dt class="param">catsEffectReleaseTimeout</dt><dd class="cmt"><p>
   Maximum amount of time Akka coordinated shutdown is allowed to wait for cats-effect to
-  finish, typically when Akka initiates shutdown following a SBR decision. Default (5 seconds)
-  is the same as the default-phase-timeout of Akka coordinated shutdown.</p></dd><dt class="param">akkaReleaseTimeout</dt><dd class="cmt"><p>
+  finish, typically when Akka initiates shutdown following a SBR decision. This value should
+  not be higher than the actual timeout for <code>before-service-unbind</code> phase of Akka coordinated
+  shutdown. See <a href="https://doc.akka.io/docs/akka/current/coordinated-shutdown.html">Akka
+  coordinated shutdown documentation</a> to learn how to configure the timeouts of individual
+  phases. Default (5 seconds) is the same as the default-phase-timeout of Akka coordinated
+  shutdown.</p></dd><dt class="param">akkaReleaseTimeout</dt><dd class="cmt"><p>
   Maximum amount of time to wait for the actor system to terminate during resource release (5
   seconds by default).</p></dd></dl><dl class="attributes block"><dt>See also</dt><dd><span class="cmt"><p>
   Some elements borrowed from
