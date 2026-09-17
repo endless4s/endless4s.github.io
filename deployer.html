@@ -169,7 +169,7 @@ endless4s/endless
 <ul style="display: none">
 <li class="md-nav__item md-version" id="project.version">
 <label class="md-nav__link" for="__version">
-<i class="md-icon" title="Version">label_outline</i> 0.32.0
+<i class="md-icon" title="Version">label_outline</i> 0.0.0+1-f42b30bc*
 </label>
 </li>
 </ul>
@@ -197,29 +197,29 @@ endless4s/endless
 <p><code>deployRepository</code> is parametrized with the following type parameters:</p>
 <ul>
   <li><code>F[_]</code>: abstract effectful context <code>F</code> encapsulating all values, e.g. <code>IO[*]</code></li>
-  <li><code>Alg[_[_]]</code>: algebra allowing interaction with the entity, e.g. <a href="https://github.com/endless4s/endless/tree/v0.32.0/example/src/main/scala/endless/example/algebra/BookingAlg.scala">BookingAlg[IO[*]]</a></li>
-  <li><code>RepositoryAlg[_[_]]</code>: repository algebra, e.g. <a href="https://github.com/endless4s/endless/tree/v0.32.0/example/src/main/scala/endless/example/algebra/BookingsAlg.scala">BookingsAlg[IO[*]]</a></li>
+  <li><code>Alg[_[_]]</code>: algebra allowing interaction with the entity, e.g. <a href="https://github.com/endless4s/endless/tree/master/example/src/main/scala/endless/example/algebra/BookingAlg.scala">BookingAlg[IO[*]]</a></li>
+  <li><code>RepositoryAlg[_[_]]</code>: repository algebra, e.g. <a href="https://github.com/endless4s/endless/tree/master/example/src/main/scala/endless/example/algebra/BookingsAlg.scala">BookingsAlg[IO[*]]</a></li>
   <li><code>ID</code>: entity ID, e.g. <code>final case class BookingID(id: UUID) extends AnyVal</code></li>
-  <li><code>S</code>: entity state, e.g. <a href="https://github.com/endless4s/endless/tree/v0.32.0/example/src/main/scala/endless/example/data/Booking.scala">Booking</a></li>
-  <li><code>E</code>: entity event, e.g. <a href="https://github.com/endless4s/endless/tree/v0.32.0/example/src/main/scala/endless/example/data/BookingEvent.scala">BookingEvent</a></li>
+  <li><code>S</code>: entity state, e.g. <a href="https://github.com/endless4s/endless/tree/master/example/src/main/scala/endless/example/data/Booking.scala">Booking</a></li>
+  <li><code>E</code>: entity event, e.g. <a href="https://github.com/endless4s/endless/tree/master/example/src/main/scala/endless/example/data/BookingEvent.scala">BookingEvent</a></li>
 </ul>
 <p>Repository operation is defined by the interpreted repository, behavior and side-effect algebras, following a strictly defined sequence:</p>
 <ol>
   <li>the interpreted repository is used to create a handle on the entity with the specified ID. This handle implements the entity algebra, using which the caller can interact with the entity.</li>
-  <li>when a function of the entity algebra is invoked, the invocation is serialized using the <code>commandProtocol</code> and sent over the wire thanks to <a href="endless.core.protocol.CommandSender">CommandSender</a>. It is then decoded on the server side and run with the provided <code>behavior</code> interpreter: this typically involves reading the entity state (e.g. for validation) and writing events (which leads to a new version of the state via the <code>eventApplier</code> folding function)</li>
+  <li>when a function of the entity algebra is invoked, the invocation is serialized using the <code>commandProtocol</code> and sent over the wire thanks to <a href="api/core/endless/core/protocol/CommandSender.html" title="endless.core.protocol.CommandSender"><code>CommandSender</code></a>. It is then decoded on the server side and run with the provided <code>behavior</code> interpreter: this typically involves reading the entity state (e.g. for validation) and writing events (which leads to a new version of the state via the <code>eventApplier</code> folding function)</li>
   <li>after events are written, a possible side-effect is triggered: this supports asynchronicity (i.e. starting fibers)</li>
   <li>the function finally returns to the caller with the result of the operation, encoded over the wire as a reply using <code>commandProtocol</code> and delivered back to the caller thanks to <code>CommandSender</code>.</li>
 </ol>
 <p>See also sequence diagrams in <a href="example.html">Example App</a> that represent this flow for a concrete entity.</p>
 </div>
 <div>
-<a href="https://github.com/endless4s/endless/tree/v0.32.0/documentation/src/main/paradox/deployer.md" title="Edit this page" class="md-source-file md-edit">
+<a href="https://github.com/endless4s/endless/tree/master/documentation/src/main/paradox/deployer.md" title="Edit this page" class="md-source-file md-edit">
 Edit this page
 </a>
 </div>
 <div class="print-only">
 <span class="md-source-file md-version">
-0.32.0
+0.0.0+1-f42b30bc*
 </span>
 </div>
 </article>
